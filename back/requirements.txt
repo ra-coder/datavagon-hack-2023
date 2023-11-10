@@ -36,6 +36,8 @@ packaging==23.2
     # via geoalchemy2
 pandas==2.1.2
     # via -r requirements.in
+psycopg2==2.9.9
+    # via -r requirements.in
 pydantic==2.4.2
     # via fastapi
 pydantic-core==2.10.1

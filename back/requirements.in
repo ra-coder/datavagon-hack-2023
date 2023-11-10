@@ -2,6 +2,7 @@ openpyxl
 pandas
 alembic
 fastapi
+psycopg2
 sqlalchemy~=2.0
 geoalchemy2
 faker
