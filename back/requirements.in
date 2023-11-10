@@ -1,0 +1,7 @@
+openpyxl
+pandas
+alembic
+fastapi
+sqlalchemy~=2.0
+geoalchemy2
+faker
