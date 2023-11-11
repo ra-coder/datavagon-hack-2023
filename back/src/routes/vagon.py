@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
@@ -55,5 +55,8 @@ async def get_table_calendar(
             {"vagon_id": vagon_id},
         )
         data = result.fetchone()
+
+    if data is None:
+        raise HTTPException(status_code=404, detail='no such vagon')
 
     return VagonRouteInfo.parse_obj(data.vagon_timeline)

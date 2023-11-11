@@ -104,3 +104,12 @@ group by vagon_id, vagon.name
 ;
 
 create index concurrently on vagon_location_stream (vagon_id, moment, train_index);
+
+select
+    id,
+    name,
+    latitude,
+    longitude
+from station;
+
+select * from peregon;

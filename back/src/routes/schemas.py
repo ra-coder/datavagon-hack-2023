@@ -41,3 +41,27 @@ class VagonEvent(BaseModel):
 class VagonRouteInfo(BaseModel):
     vagon: Vagon
     events: list[VagonEvent]
+
+
+class Station(BaseModel):
+    id: int
+    name: str
+    latitude: float | None
+    longitude: float | None
+
+
+class StationsResponse(BaseModel):
+    stations: list[Station]
+    filters: dict | None
+
+
+class Peregon(BaseModel):
+    id: int
+    from_station_id: int
+    to_station_id: int
+    len_km: float
+
+
+class PeregonsResponse(BaseModel):
+    peregons: list[Peregon]
+    filters: dict | None
