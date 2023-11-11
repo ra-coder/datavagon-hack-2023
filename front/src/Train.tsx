@@ -33,7 +33,7 @@ function IntTrain({id, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<Timeline>();
 
     React.useEffect(() => {
-        const url = `http://158.160.78.28:8000/api/v1/train/${id}/timeline`;
+        const url = `http://158.160.26.131:8000/api/v1/train/${id}/timeline`;
         fetch(url).then((data) => data.json()).then((data) => {
             console.log(data);
             setTimeline(data);
