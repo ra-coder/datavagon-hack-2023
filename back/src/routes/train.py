@@ -13,6 +13,7 @@ train_api_router = APIRouter()
 async def get_table_calendar(
     train_index: str,
     on_timestamp: int | None = Query(alias='on_timestamp', default=None),
+    window_secs: int = Query(alias='window_secs', default=24*7*60*60),
     # session: AsyncSession = Depends(get_session),
 ) -> TrainRouteInfo:
     query = text("""
@@ -32,12 +33,13 @@ async def get_table_calendar(
         where 
             vagon_location_stream.train_index= :train_index
                 AND
-            (:on_timestamp :: int isnull  OR vagon_location_stream.moment <= to_timestamp(:on_timestamp :: int))
+            (:on_timestamp :: int isnull  OR vagon_location_stream.moment between (
+            to_timestamp(:on_timestamp :: int - :window_secs :: int ) )  and  to_timestamp(:on_timestamp :: int))
         group by vagon_location_stream.train_index, moment,
                  dislocation_station_id, latitude, longitude, station.name,
                  train.name
         order by
-                train_index, moment desc 
+                train_index desc, moment desc 
         )
         select
             jsonb_build_object(
@@ -71,6 +73,7 @@ async def get_table_calendar(
             params={
                 "train_index": train_index,
                 "on_timestamp": on_timestamp,
+                "window_secs": window_secs,
             },
         )
         data = result.fetchone()
@@ -113,7 +116,7 @@ async def get_table_calendar(
                     and train_index notnull
                     and dislocation_station_id notnull 
                 group by train_index, moment, dislocation_station_id, station.id
-                order by train_index, moment desc
+                order by train_index desc, moment desc
             )
             select
                 jsonb_build_object(

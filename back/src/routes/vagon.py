@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
@@ -12,6 +12,7 @@ vagon_api_router = APIRouter()
 @vagon_api_router.get("/api/v1/vagon/{vagon_id}/timeline", response_model=VagonRouteInfo)
 async def get_table_calendar(
     vagon_id: int,
+    on_timestamp: int | None = Query(alias='on_timestamp', default=None),
     # session: AsyncSession = Depends(get_session),
 ) -> VagonRouteInfo:
     query = text("""
