@@ -60,9 +60,47 @@ group by train_index, train_name
 
 
 
-select * from peregon
-         where
-    (from_station_id=7000 or to_station_id=6999)
-        or
-    (to_station_id=7000 or from_station_id=6999)
+-- select * from peregon
+--          where
+--     (from_station_id=7000 or to_station_id=6999)
+--         or
+--     (to_station_id=7000 or from_station_id=6999)
 
+select *
+from datavagon.public.vagon_location_stream where vagon_id =1738
+order by vagon_id, moment;
+
+explain
+select
+    jsonb_build_object(
+    'vagon', jsonb_build_object(
+        'id', vagon_id,
+        'name', vagon.name
+    ),
+    'events', jsonb_agg(
+        jsonb_build_object(
+                'moment', extract(epoch from moment)::int,
+              --  'moment_as_time_debug', moment,
+                'dislocation', jsonb_build_object(
+                    'id', dislocation_station_id,
+                    'name', station.name,
+                    'latitude', latitude,
+                    'longitude', longitude
+                ),
+                'train', jsonb_build_object(
+                        'train_index', train.train_index,
+                        'name', train.name
+                )
+            )
+        ORDER BY vagon_id, moment
+    )
+) as vagon_timeline
+from datavagon.public.vagon_location_stream
+join station on vagon_location_stream.dislocation_station_id = station.id
+join train on train.train_index = vagon_location_stream.train_index
+join vagon on vagon_location_stream.vagon_id = vagon.id
+where vagon_location_stream.vagon_id=8063
+group by vagon_id, vagon.name
+;
+
+create index concurrently on vagon_location_stream (vagon_id, moment, train_index);

@@ -8,6 +8,7 @@ from config import settings
 from fastapi_extension import AppBuilder
 from fastapi_extension.probes import DBStatus, LivenessStatus
 from routes.train import train_api_router
+from routes.vagon import vagon_api_router
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ app = (
 )
 
 app.include_router(train_api_router)
+app.include_router(vagon_api_router)
 
 
 def traces_sampler(context: dict) -> float:

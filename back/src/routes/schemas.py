@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import List
-
 from pydantic import BaseModel
 
 
@@ -13,17 +11,33 @@ class Train(BaseModel):
 class Dislocation(BaseModel):
     id: int
     name: str
-    latitude: float
-    longitude: float
+    latitude: float | None
+    longitude: float | None
 
 
 class TrainEvent(BaseModel):
     moment: int
-    vagon_ids: List[int]
+    vagon_ids: list[int]
     dislocation: Dislocation
     moment_as_time_debug: str
 
 
 class TrainRouteInfo(BaseModel):
     train: Train
-    events: List[TrainEvent]
+    events: list[TrainEvent]
+
+
+class Vagon(BaseModel):
+    id: int
+    name: str
+
+
+class VagonEvent(BaseModel):
+    train: Train
+    moment: int
+    dislocation: Dislocation
+
+
+class VagonRouteInfo(BaseModel):
+    vagon: Vagon
+    events: list[VagonEvent]

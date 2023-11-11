@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Path
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
@@ -9,9 +9,9 @@ from .schemas import TrainRouteInfo
 train_api_router = APIRouter()
 
 
-@train_api_router.get("/api/v1/train", response_model=TrainRouteInfo)
+@train_api_router.get("/api/v1/train/{train_index}/timeline", response_model=TrainRouteInfo)
 async def get_table_calendar(
-    train_index: str = Query(alias="train_index"),
+    train_index: str,
     # session: AsyncSession = Depends(get_session),
 ) -> TrainRouteInfo:
     query = text("""
