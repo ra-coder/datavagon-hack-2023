@@ -19,3 +19,8 @@ body,
 
     transform: translate(8px, -50%);
 }
+
+ul {
+    margin: 0;
+    padding: 0 16px;
+}
