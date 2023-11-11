@@ -27,7 +27,7 @@ export function withMap<T extends Ymaps>(Child: React.ComponentType<T>) {
             ymapsPromise.then(setYmaps)
         }, [])
 
-        if (!ymaps) return;
+        if (!ymaps) return null;
 
         return (
             <Child {...props as T} ymaps={ymaps} />

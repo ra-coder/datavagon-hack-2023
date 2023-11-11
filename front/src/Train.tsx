@@ -38,9 +38,9 @@ function IntTrain({id, ymaps}: TrainProps) {
             console.log(data);
             setTimeline(data);
         })
-    }, []);
+    }, [id]);
 
-    if (!timeline) return;
+    if (!timeline) return null;
 
     return (
         <>
