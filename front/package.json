@@ -7,7 +7,7 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@yandex/ymaps3-types": "^0.0.19",
-    "lodash.throttle": "^4.1.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
