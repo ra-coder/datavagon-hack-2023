@@ -8,7 +8,7 @@ const MAX_MOMENT = 1693515600000;
 const INITIAL_MOMENT = 1689467400000;
 
 const useMoment = (initialMoment: number): [number, React.Dispatch<React.SetStateAction<number>>] => {
-    const [moment, setMoment] = React.useState<number>(INITIAL_MOMENT);
+    const [moment, setMoment] = React.useState<number>(initialMoment);
 
     return [moment, setMoment];
 }
