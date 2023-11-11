@@ -54,8 +54,8 @@ class Train(Base):
     )
 
     train_index = Column(String(32), primary_key=True)
-    from_station_id = Column(Integer, ForeignKey('station.id'), nullable=False)
-    to_station_id = Column(Integer, ForeignKey('station.id'), nullable=False)
+    from_station_id = Column(Integer, ForeignKey('station.id'), nullable=True)
+    to_station_id = Column(Integer, ForeignKey('station.id'), nullable=True)
     number = Column(Integer)
     name = Column(Text)  # generated name from faker
 
@@ -66,9 +66,9 @@ class VagonLocationStream(Base):
         Index("stream__vagon_id__idx", "vagon_id", "moment"),
         Index("stream__train_index__idx", "train_index", "moment", "vagon_id"),
     )
-
-    vagon_id = Column(Integer, ForeignKey('vagon.id'), nullable=False, primary_key=True)
-    moment = Column(DateTime, primary_key=True)
-    dislocation_station_id = Column(Integer, ForeignKey('station.id'), nullable=False)
-    to_station_id = Column(Integer, ForeignKey('station.id'), nullable=False)
-    train_index = Column(String(32), ForeignKey('train.train_index'), nullable=False)
+    id = Column(Integer, Sequence("vagon_location_stream_id_seq"), primary_key=True)
+    vagon_id = Column(Integer, ForeignKey('vagon.id'), nullable=False)
+    moment = Column(DateTime, nullable=False)
+    dislocation_station_id = Column(Integer, ForeignKey('station.id'), nullable=True)
+    to_station_id = Column(Integer, ForeignKey('station.id'), nullable=True)
+    train_index = Column(String(32), ForeignKey('train.train_index'), nullable=True)
