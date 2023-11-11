@@ -2,7 +2,7 @@ import React from 'react';
 
 import { getWagonIdFromPath, stringidyDate } from './utils';
 import { getWagonInfo } from './requests';
-import type { TimeEventWagon, WagonTimeline, Train, Dislocation } from './type';
+import type {TimeEventWagon, WagonTimeline, Train, Dislocation} from './interface';
 
 import './WagonPanel.css';
 /*
