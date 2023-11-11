@@ -17,7 +17,7 @@ export function getStations() {
 }
 
 export async function getWagonInfo(wagonId: string): Promise<WagonTimeline> {
-    return request(`${backendUrl}/api/v1/vagon/${wagonId}/timeline`);
+    return request(`${backendUrl}/vagon/${wagonId}/timeline`);
 }
 
 function request(url: string) {

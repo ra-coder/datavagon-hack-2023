@@ -1,5 +1,5 @@
 import React from 'react';
-import {stringidyDate} from './utils';
+import {stringifyDate} from './utils';
 import type {TimeEventTrain, TrainTimeline} from './interface';
 
 import './TrainPanel.css';
@@ -54,7 +54,7 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
     }
 
     const renderEvent = (timeEvent: TimeEventTrain) => {
-        const [date, time] = stringidyDate(new Date(timeEvent.moment * 1000));
+        const [date, time] = stringifyDate(new Date(timeEvent.moment * 1000));
         return (
             <div key={timeEvent.dislocation.id} className='TrainPanel__time-event'>
                 <div className='TrainPanel__time-event-time'>
