@@ -12,6 +12,7 @@ from routes.peregon import peregon_api_router
 from routes.station import station_api_router
 from routes.train import train_api_router
 from routes.vagon import vagon_api_router
+from routes.deikstra import deikstra_api_router
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ app.include_router(train_api_router)
 app.include_router(vagon_api_router)
 app.include_router(station_api_router)
 app.include_router(peregon_api_router)
+app.include_router(deikstra_api_router)
 
 
 def traces_sampler(context: dict) -> float:
