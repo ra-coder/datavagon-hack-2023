@@ -5,7 +5,7 @@ export interface Train {
     train_index: string;
 }
 
-interface Vagon {
+export interface Vagon {
     name: string;
     id: string;
 }
@@ -37,6 +37,19 @@ export interface TimeEventWagon {
 export interface WagonTimeline {
     vagon: Vagon;
     events: TimeEventWagon[];
+}
+
+export interface WagonEventsParsed {
+    train: Train;
+    route: {
+        start: Dislocation;
+        end: Dislocation;
+    };
+    duration: number;
+    moment: {
+        start: number;
+        end: number;
+    }
 }
 
 export type SetMapLocation = React.Dispatch<React.SetStateAction<YMapLocationRequest>>;

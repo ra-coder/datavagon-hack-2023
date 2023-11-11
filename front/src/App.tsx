@@ -1,13 +1,7 @@
 import {Map} from './Map';
-import { WagonPanel } from './WagonPanel';
 
 function App() {
-  return (
-    <>
-      <WagonPanel />
-      <Map />
-    </>
-  );
+  return <Map />;
 }
 
 export default App;

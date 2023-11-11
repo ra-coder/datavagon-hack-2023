@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { getWagonIdFromPath, stringidyDate } from './utils';
-import { getWagonInfo } from './requests';
-import type {TimeEventWagon, WagonTimeline, Train, Dislocation} from './interface';
+import { stringifyDate } from './utils';
+import type {Vagon, WagonEventsParsed} from './interface';
 
 import './WagonPanel.css';
 /*
@@ -33,75 +32,18 @@ id
 const DAY_SECONDS = 86400;
 const HOUR_SECONDS = 3600;
 
-interface WagonEventsParsed {
-    train: Train;
-    route: {
-        start: Dislocation;
-        end: Dislocation;
-    };
-    duration: number;
-    moment: {
-        start: number;
-        end: number;
-    }
+interface WagonPanelProps {
+    id: string;
+    timeline: WagonEventsParsed[];
+    wagon: Vagon;
 }
 
-const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] => {
-    const res: WagonEventsParsed[] = [];
-
-    let endMoment: number;
-    let endDislocaion: Dislocation;
-    for (let i = wagonEvents.length - 1; i >= 0; i--) {
-        const curEvent = wagonEvents[i];
-        if (i === wagonEvents.length - 1) {
-            endMoment = curEvent.moment;
-            endDislocaion = curEvent.dislocation;
-            continue;
-        }
-        const prevEvent = wagonEvents[i + 1];
-        // if (i === 0) {
-        //     continue;
-        // }
-
-        if (curEvent.train.train_index !== prevEvent.train.train_index) {
-            res.push({
-                train: prevEvent.train,
-                route: {
-                    start: prevEvent.dislocation,
-                    end: endDislocaion!,
-                },
-                duration: endMoment! - prevEvent.moment,
-                moment: {
-                    start: prevEvent.moment,
-                    end: endMoment!,
-                }
-            });
-            continue;
-        }
-
-        /* Можно аккамулировать информацию по одному поезду в этом месте */
-    }
-
-    return res;
-}
-
-const WagonPanel: React.FC = () => {
-    const [wagonInfo, setWagonInfo] = React.useState<WagonTimeline | null>(null);
-    const wagonId = getWagonIdFromPath();
-
-    React.useEffect(() => {
-        if (wagonId) {
-            getWagonInfo(wagonId).then((v) => {
-                console.log(v);
-                setWagonInfo(v);
-            }).catch(e => {
-                setWagonInfo(null);
-                console.error(e);
-            })
-        }
-    }, [wagonId]);
-
-    if (!wagonId || !wagonInfo) {
+const WagonPanel: React.FC<WagonPanelProps> = ({
+    id,
+    wagon,
+    timeline
+}) => {
+    if (!id) {
         return null;
     }
 
@@ -127,8 +69,8 @@ const WagonPanel: React.FC = () => {
         const train = ev.train;
         const route = ev.route;
         const moment = ev.moment;
-        const [startDate, startTime]  = stringidyDate(new Date(moment.start * 1000))
-        const [endDate, endTime]  = stringidyDate(new Date(moment.end * 1000))
+        const [startDate, startTime]  = stringifyDate(new Date(moment.start * 1000))
+        const [endDate, endTime]  = stringifyDate(new Date(moment.end * 1000))
         return (
             <div key={ev.train.train_index} className='WagonPanel__time-event'>
                 {renderRow('Поезд', `${train.name} ${train.train_index}`)}
@@ -140,17 +82,13 @@ const WagonPanel: React.FC = () => {
         )
     }
 
-    const wagon = wagonInfo.vagon;
-    const events = parseWagonEvents(wagonInfo.events);
-    console.log(events);
-
     return (
         <div className='WagonPanel'>
             <div className='WagonPanel__title'>
                 {wagon.name} {wagon.id}
             </div>
             <div className='WagonPanel__time-events'>
-                {events.map(renderEvent)}
+                {timeline.map(renderEvent)}
             </div>
         </div>
     )

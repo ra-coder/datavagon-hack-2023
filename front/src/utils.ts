@@ -19,13 +19,6 @@ window.onpopstate = () => {
     historyWatchers.forEach((watcher) => watcher());
 };
 
-const getTrainIndexFromPath = (): string | undefined => {
-    const {type, id} = getParamsFromPath();
-    if (type !== 'train') return;
-
-    return id;
-}
-
 type AvailableType = 'train' | 'wagon' | 'main';
 export interface UrlParams {
     type: AvailableType;
@@ -62,17 +55,7 @@ export function useWatchHistory(): UrlParams {
     return params;
 }
 
-const getWagonIdFromPath = (): string | undefined => {
-    const path = window.location.pathname;
-    const pathArryied = path.split('/');
-    if (pathArryied[1] !== 'wagon') {
-        return undefined;
-    }
-
-    return pathArryied[2];
-}
-
-const stringidyDate = (dateMoment: Date): [string, string] => {
+const stringifyDate = (dateMoment: Date): [string, string] => {
     const date = dateMoment.getFullYear() + "-" +
     (dateMoment.getMonth() + 1).toString().padStart(2, '0') + "-" +
     dateMoment.getDate().toString().padStart(2, '0');
@@ -104,7 +87,5 @@ export function compactTrainTimeLineEvents(timeline: TrainTimeline) {
 
 export {
     pushHistory,
-    getTrainIndexFromPath,
-    stringidyDate,
-    getWagonIdFromPath,
+    stringifyDate,
 };
