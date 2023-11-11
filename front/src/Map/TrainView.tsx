@@ -18,6 +18,11 @@ export const TrainView = withMap(function({id, moment, setLocation, ymaps}: Trai
 
     React.useEffect(() => {
         getTrainTimeLine(id, moment).then((data) => {
+            const detail = (data as unknown as { detail: string }).detail
+            if (detail) {
+                alert(detail);
+                return;
+            }
             const nextTimeline = {
                 ...data,
                 events: compactTrainTimeLineEvents(data)
