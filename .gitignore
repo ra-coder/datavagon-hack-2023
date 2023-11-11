@@ -1,3 +1,4 @@
 data
 .ssh
 *.env
+.DS_Store
