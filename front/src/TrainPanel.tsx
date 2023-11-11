@@ -3,7 +3,7 @@ import React from 'react';
 import './TrainPanel.css';
 import { getTrainIndexFromPath, stringidyDate } from './utils';
 import { getTrainInfo } from './requests';
-import type { TimeEvent, TrainTimeline } from './type';
+import type { TimeEventTrain, TrainTimeline } from './type';
 
 /*
 train_index
@@ -56,7 +56,7 @@ const TrainPanel: React.FC = () => {
         )
     }
 
-    const renderEvent = (timeEvent: TimeEvent) => {
+    const renderEvent = (timeEvent: TimeEventTrain) => {
         const [date, time] = stringidyDate(new Date(timeEvent.moment * 1000));
         return (
             <div key={timeEvent.dislocation.id} className='TrainPanel__time-event'>
@@ -73,7 +73,7 @@ const TrainPanel: React.FC = () => {
         )
     }
 
-    const events = trainInfo.events.reduce<TimeEvent[]>((acc, currentEvent, index, array) => {
+    const events = trainInfo.events.reduce<TimeEventTrain[]>((acc, currentEvent, index, array) => {
         if (index === array.length - 1) {
             acc.push(currentEvent);
         } else if (index === 0) {
