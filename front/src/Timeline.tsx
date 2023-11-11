@@ -7,11 +7,18 @@ import { MAX_MOMENT, MIN_MOMENT, useMoment } from './withMoment';
 const DELAY = 300;
 const STEP = 10 * 60 * 1000;
 
-const Timeline: React.FC = () => {
-    const [moment, setMoment] = useMoment();
+interface TimelineProps {
+    initialMoment: number;
+    onUpdate: (moment: number) => void;
+}
+
+const Timeline: React.FC<TimelineProps> = ({initialMoment, onUpdate}) => {
+    const [moment, setMoment] = useMoment(initialMoment);
 
     const onChane: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        setMoment(Number(e.target.value));
+        const nextMoment = Number(e.target.value);
+        setMoment(nextMoment);
+        onUpdate(nextMoment);
     }
     const onChangeThrottled = throttle(onChane, DELAY)
 
@@ -33,6 +40,7 @@ const Timeline: React.FC = () => {
                 max={MAX_MOMENT}
                 step={STEP}
                 onChange={onChangeThrottled}
+                value={moment}
             />
             <div className='Timeline__date'>
                 <span>{date}</span>
