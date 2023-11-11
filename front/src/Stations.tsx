@@ -1,7 +1,7 @@
 import React from 'react';
 import {Ymaps, withMap} from './withMap';
 import {BehaviorMapEventHandler, LngLatBounds} from '@yandex/ymaps3-types';
-import {backendUrl} from './utils';
+import { getStations } from './requests';
 
 type StationsProps = Ymaps & {
     initialBounds: LngLatBounds;
@@ -30,8 +30,7 @@ function IntStations({initialBounds, ymaps}: StationsProps) {
     const [stations, setStations] = React.useState<Station[]>();
 
     React.useEffect(() => {
-        const url = `${backendUrl}/stations`;
-        fetch(url).then((data) => data.json()).then((data) => {
+        getStations().then((data) => {
             setStations(data.stations);
         })
     }, []);

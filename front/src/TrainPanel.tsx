@@ -1,9 +1,8 @@
 import React from 'react';
+import {stringidyDate} from './utils';
+import type {TimeEventTrain, TrainTimeline} from './interface';
 
 import './TrainPanel.css';
-import { getTrainIndexFromPath, stringidyDate } from './utils';
-import { getTrainInfo } from './requests';
-import type { TimeEventTrain, TrainTimeline } from './type';
 
 /*
 train_index
@@ -25,33 +24,31 @@ train_index
 6484-500-6522
 */
 
-const TrainPanel: React.FC = () => {
-    const [trainInfo, setTrainInfo] = React.useState<TrainTimeline | null>(null);
-    const trainIndex = getTrainIndexFromPath();
+interface TrainPanelProps {
+    id: string;
+    timeline: TrainTimeline;
+}
 
-    React.useEffect(() => {
-        if (trainIndex) {
-            getTrainInfo(trainIndex).then(d => {
-                console.log(d);
-                setTrainInfo(d);
-            }).catch((e) => {
-                setTrainInfo(null);
-                console.error(e);
-            });
-        }
-    }, [trainIndex])
-
-    if (!trainIndex || !trainInfo) {
+export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
+    if (!id || !timeline) {
         return null;
     }
 
-    const train = trainInfo.train;
+    const train = timeline.train;
     const [train_from, train_id, trin_to] = train.train_index.split('-');
 
     const renderRow = (title: string, val: string) => {
         return (
             <div className='TrainPanel__row'>
                 {title}: <span>{val}</span>
+            </div>
+        )
+    }
+
+    const renderList = (title: string, list: (string | number)[]) => {
+        return (
+            <div className='TrainPanel__row'>
+                {title}: <ul>{list.map((val, i) => <li key={i}>{val}</li>)}</ul>
             </div>
         )
     }
@@ -67,24 +64,11 @@ const TrainPanel: React.FC = () => {
                 </div>
                 <div className='TrainPanel__time-event-meta'>
                     {renderRow('Станция', `${timeEvent.dislocation.name} ${String(timeEvent.dislocation.id)}`)}
-                    {renderRow('Вагоны', timeEvent.vagon_ids.join(','))}
+                    {renderList('Вагоны', timeEvent.vagon_ids)}
                 </div>
             </div>
         )
     }
-
-    const events = trainInfo.events.reduce<TimeEventTrain[]>((acc, currentEvent, index, array) => {
-        if (index === array.length - 1) {
-            acc.push(currentEvent);
-        } else if (index === 0) {
-            return acc;
-        } else if (currentEvent.dislocation.id !== array[index - 1].dislocation.id) {
-            acc.push(array[index - 1]);
-        }
-
-        return acc;
-
-    }, [])
 
     return (
         <div className='TrainPanel'>
@@ -99,10 +83,8 @@ const TrainPanel: React.FC = () => {
                 История
             </div>
             <div className='TrainPanel__time-events'>
-                {events.map(renderEvent)}
+                {timeline.events.map(renderEvent)}
             </div>
         </div>
     )
 }
-
-export { TrainPanel };
