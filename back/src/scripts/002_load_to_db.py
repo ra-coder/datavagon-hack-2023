@@ -167,28 +167,27 @@ def stream_events_generator_1_5():
                     )
 
 
-def stream_events_generator_5_15():
-    for index in range(2, 15):
-        with open(f'../../data/parsed/disl_hackaton_Sheet {index}.csv', newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                vagon_id = int(row['WAGNUM'])
-                if row['TRAIN_INDEX']:
-                    yield VagonLocationStream(
-                        vagon_id=vagon_id,
-                        moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
-                        dislocation_station_id=int(float(row["ST_ID_DISL"])),
-                        to_station_id=int(float(row["ST_ID_DEST"])),
-                        train_index=row["TRAIN_INDEX"]
-                    )
-                else:
-                    yield VagonLocationStream(
-                        vagon_id=vagon_id,
-                        moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
-                        dislocation_station_id=int(float(row["ST_ID_DISL"])),
-                        to_station_id=int(float(row["ST_ID_DEST"])),
-                        train_index=None,
-                    )
+def stream_events_generator(sheet_index):
+    with open(f'../../data/parsed/disl_hackaton_Sheet {sheet_index}.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            vagon_id = int(row['WAGNUM'])
+            if row['TRAIN_INDEX']:
+                yield VagonLocationStream(
+                    vagon_id=vagon_id,
+                    moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
+                    dislocation_station_id=int(float(row["ST_ID_DISL"])),
+                    to_station_id=int(float(row["ST_ID_DEST"])),
+                    train_index=row["TRAIN_INDEX"]
+                )
+            else:
+                yield VagonLocationStream(
+                    vagon_id=vagon_id,
+                    moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
+                    dislocation_station_id=int(float(row["ST_ID_DISL"])),
+                    to_station_id=int(float(row["ST_ID_DEST"])),
+                    train_index=None,
+                )
 
 
 async def insert_values(models_generator):
@@ -211,4 +210,6 @@ loop = asyncio.get_event_loop()
 # loop.run_until_complete(insert_values(stream_middle_stations_generator())) # no extra
 # loop.run_until_complete(insert_values(stream_train_generator()))
 # loop.run_until_complete(insert_values(stream_events_generator_1_5()))
-loop.run_until_complete(insert_values(stream_events_generator_5_15()))
+for index in range(2, 15):
+    loop.run_until_complete(insert_values(stream_events_generator(index)))
+    print(f"done sheet {index}")
