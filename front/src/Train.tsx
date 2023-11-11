@@ -1,20 +1,10 @@
 import React from 'react';
 import {Ymaps, withMap} from './withMap';
-import { LngLat } from '@yandex/ymaps3-types';
+import {backendUrl, getLngLat} from './utils';
+import {TrainEvent} from './interface';
 
 type TrainProps = Ymaps & {
     id: string;
-}
-
-interface Event {
-    moment: number
-    vagon_ids: number[];
-    dislocation: {
-        id: number;
-        name: string;
-        latitude: number;
-        longitude: number;
-    },
 }
 
 interface Timeline {
@@ -22,20 +12,15 @@ interface Timeline {
         name: string;
         train_index: string;
     }
-    events: Event[]
-}
-
-function getLngLat(event: Event): LngLat {
-    return [event.dislocation.longitude, event.dislocation.latitude];
+    events: TrainEvent[]
 }
 
 function IntTrain({id, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<Timeline>();
 
     React.useEffect(() => {
-        const url = `http://158.160.26.131:8000/api/v1/train/${id}/timeline`;
+        const url = `${backendUrl}/train/${id}/timeline`;
         fetch(url).then((data) => data.json()).then((data) => {
-            console.log(data);
             setTimeline(data);
         })
     }, [id]);
@@ -45,21 +30,13 @@ function IntTrain({id, ymaps}: TrainProps) {
     return (
         <>
             {timeline.events.map((event, index) => (
-                <ymaps.YMapMarker key={index} coordinates={getLngLat(event)} properties={{hint: new Date(event.moment * 1000).toString()}}>
+                <ymaps.YMapMarker key={index} coordinates={getLngLat(event)} properties={{hint: event}}>
                     <div style={{width: 16, height: 16, background: '#7036BD', transform: 'translate(-50%, -50%)'}} />
                 </ymaps.YMapMarker>
             ))}
             <ymaps.YMapFeature geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}} />
-            <ymaps.YMapHint hint={object => object?.properties?.hint}>
-                <TrainHint />
-            </ymaps.YMapHint>
         </>
     );
 }
-
-const TrainHint = withMap(function TrainHintInt({ymaps}: Ymaps) {
-    const ctx = React.useContext(ymaps.YMapHintContext);
-    return <div className="hint">{ctx && ctx.hint}</div>;
-})
 
 export const Train = withMap(IntTrain);

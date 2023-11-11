@@ -1,5 +1,5 @@
 import React from 'react';
-import throttle from 'lodash.throttle'
+import {debounce} from 'lodash'
 
 import './Timeline.css';
 import { MAX_MOMENT, MIN_MOMENT, useMoment } from './withMoment';
@@ -7,13 +7,20 @@ import { MAX_MOMENT, MIN_MOMENT, useMoment } from './withMoment';
 const DELAY = 300;
 const STEP = 10 * 60 * 1000;
 
-const Timeline: React.FC = () => {
-    const [moment, setMoment] = useMoment();
+interface TimelineProps {
+    initialMoment: number;
+    onUpdate: (moment: number) => void;
+}
+
+const Timeline: React.FC<TimelineProps> = ({initialMoment, onUpdate}) => {
+    const [moment, setMoment] = useMoment(initialMoment);
 
     const onChane: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        setMoment(Number(e.target.value));
+        const nextMoment = Number(e.target.value);
+        setMoment(nextMoment);
+        onUpdate(nextMoment);
     }
-    const onChangeThrottled = throttle(onChane, DELAY)
+    const onChangeThrottled = debounce(onChane, DELAY)
 
     const currentMoment = new Date(moment);
     const date = currentMoment.getFullYear() + "-" +
@@ -33,6 +40,7 @@ const Timeline: React.FC = () => {
                 max={MAX_MOMENT}
                 step={STEP}
                 onChange={onChangeThrottled}
+                defaultValue={moment}
             />
             <div className='Timeline__date'>
                 <span>{date}</span>
