@@ -33,7 +33,7 @@ function IntTrain({id, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<Timeline>();
 
     React.useEffect(() => {
-        const url = './train.json'; // `http://158.160.78.28:8000/api/v1/train/${id}/timeline`;
+        const url = `http://158.160.78.28:8000/api/v1/train/${id}/timeline`;
         fetch(url).then((data) => data.json()).then((data) => {
             console.log(data);
             setTimeline(data);
@@ -46,10 +46,7 @@ function IntTrain({id, ymaps}: TrainProps) {
         <>
             {timeline.events.map((event, index) => (
                 <ymaps.YMapMarker key={index} coordinates={getLngLat(event)} properties={{hint: new Date(event.moment * 1000).toString()}}>
-                    <div style={{width: 16, height: 16, background: '#7036BD', transform: 'translate(-50%, -50%)'}}>
-                        {// new Date(event.moment * 1000).toString()}
-                        }
-                    </div>
+                    <div style={{width: 16, height: 16, background: '#7036BD', transform: 'translate(-50%, -50%)'}} />
                 </ymaps.YMapMarker>
             ))}
             <ymaps.YMapFeature geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}} />
