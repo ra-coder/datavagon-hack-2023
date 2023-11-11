@@ -1,0 +1,36 @@
+.WagonPanel {
+    width: 440px;
+    position: fixed;
+    padding: 16px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px 0 #0003;
+    top: 10px;
+    left: 10px;
+    background-color: #fff;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.WagonPanel__title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.WagonPanel__time-events {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+.WagonPanel__time-event {
+    margin-bottom: 8px;
+    border-bottom: 1px solid grey;
+    padding-bottom: 8px;
+    box-sizing: border-box;
+}
+.WagonPanel__time-event:last-of-type {
+    border-bottom: none;
+}
+
+.WagonPanel__row span {
+    font-weight: bold;
+}
