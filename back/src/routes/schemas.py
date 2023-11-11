@@ -19,7 +19,6 @@ class TrainEvent(BaseModel):
     moment: int
     vagon_ids: list[int]
     dislocation: Dislocation
-    moment_as_time_debug: str
 
 
 class TrainRouteInfo(BaseModel):
@@ -65,3 +64,19 @@ class Peregon(BaseModel):
 class PeregonsResponse(BaseModel):
     peregons: list[Peregon]
     filters: dict | None
+
+
+class TrainInfoOnTime(BaseModel):
+    last_moment: str
+    train_index: str
+    events: list[TrainEvent]
+
+
+class TimestampFilter(BaseModel):
+    on_timestamp: int
+    window_secs: int
+
+
+class TrainsInfoOnTime(BaseModel):
+    trains: list[TrainInfoOnTime]
+    filters: TimestampFilter
