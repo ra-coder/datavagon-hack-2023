@@ -1,6 +1,6 @@
 import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 
@@ -12,6 +12,7 @@ train_api_router = APIRouter()
 @train_api_router.get("/api/v1/train/{train_index}/timeline", response_model=TrainRouteInfo)
 async def get_table_calendar(
     train_index: str,
+    on_timestamp: int | None = Query(alias='on_timestamp', default=None),
     # session: AsyncSession = Depends(get_session),
 ) -> TrainRouteInfo:
     query = text("""
@@ -28,12 +29,15 @@ async def get_table_calendar(
         from datavagon.public.vagon_location_stream
         join station on vagon_location_stream.dislocation_station_id = station.id
         join train on train.train_index = vagon_location_stream.train_index
-        where vagon_location_stream.train_index= :train_index
+        where 
+            vagon_location_stream.train_index= :train_index
+                AND
+            (:on_timestamp :: int isnull  OR vagon_location_stream.moment <= to_timestamp(:on_timestamp :: int))
         group by vagon_location_stream.train_index, moment,
                  dislocation_station_id, latitude, longitude, station.name,
                  train.name
         order by
-                train_index, moment
+                train_index, moment desc 
         )
         select
             jsonb_build_object(
@@ -64,7 +68,10 @@ async def get_table_calendar(
     async with AsyncSession(engine) as session:
         result = await session.execute(
             query,
-            {"train_index": train_index},
+            params={
+                "train_index": train_index,
+                "on_timestamp": on_timestamp,
+            },
         )
         data = result.fetchone()
         if data is None:
