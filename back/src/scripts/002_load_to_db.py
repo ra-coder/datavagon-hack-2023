@@ -176,16 +176,16 @@ def stream_events_generator(sheet_index):
                 yield VagonLocationStream(
                     vagon_id=vagon_id,
                     moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
-                    dislocation_station_id=int(float(row["ST_ID_DISL"])),
-                    to_station_id=int(float(row["ST_ID_DEST"])),
+                    dislocation_station_id=int(float(row["ST_ID_DISL"])) if row["ST_ID_DISL"] else None,
+                    to_station_id=int(float(row["ST_ID_DEST"])) if row["ST_ID_DEST"] else None,
                     train_index=row["TRAIN_INDEX"]
                 )
             else:
                 yield VagonLocationStream(
                     vagon_id=vagon_id,
                     moment=datetime.datetime.strptime(row["OPERDATE"], "%Y-%m-%d %H:%M:%S"),
-                    dislocation_station_id=int(float(row["ST_ID_DISL"])),
-                    to_station_id=int(float(row["ST_ID_DEST"])),
+                    dislocation_station_id=int(float(row["ST_ID_DISL"])) if row["ST_ID_DISL"] else None,
+                    to_station_id=int(float(row["ST_ID_DEST"])) if row["ST_ID_DEST"] else None,
                     train_index=None,
                 )
 
@@ -210,6 +210,6 @@ loop = asyncio.get_event_loop()
 # loop.run_until_complete(insert_values(stream_middle_stations_generator())) # no extra
 # loop.run_until_complete(insert_values(stream_train_generator()))
 # loop.run_until_complete(insert_values(stream_events_generator_1_5()))
-for index in range(2, 15):
+for index in range(9, 15):
     loop.run_until_complete(insert_values(stream_events_generator(index)))
     print(f"done sheet {index}")

@@ -15,7 +15,7 @@ select
 from datavagon.public.vagon_location_stream
 join station on vagon_location_stream.dislocation_station_id = station.id
 join train on train.train_index = vagon_location_stream.train_index
-where vagon_location_stream.train_index='5124-071-6999'
+where vagon_location_stream.train_index='7475-318-62'
 group by vagon_location_stream.train_index, moment,
          dislocation_station_id, latitude, longitude, station.name,
          train.name
