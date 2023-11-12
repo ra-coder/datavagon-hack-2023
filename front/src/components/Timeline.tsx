@@ -1,8 +1,8 @@
 import React from 'react';
-import {debounce} from 'lodash'
+import {debounce} from 'lodash';
 
 import './Timeline.css';
-import { MAX_MOMENT, MIN_MOMENT, useMoment } from '../hooks/useMoment';
+import {MAX_MOMENT, MIN_MOMENT, useMoment} from '../hooks/useMoment';
 
 const DELAY = 300;
 const STEP = 10 * 60 * 1000;
@@ -19,22 +19,28 @@ const Timeline: React.FC<TimelineProps> = ({initialMoment, onUpdate}) => {
         const nextMoment = Number(e.target.value);
         setMoment(nextMoment);
         onUpdate(nextMoment);
-    }
-    const onChangeThrottled = debounce(onChane, DELAY)
+    };
+    const onChangeThrottled = debounce(onChane, DELAY);
 
     const currentMoment = new Date(moment);
-    const date = currentMoment.getFullYear() + "-" +
-        (currentMoment.getMonth() + 1).toString().padStart(2, '0') + "-" +
+    const date =
+        currentMoment.getFullYear() +
+        '-' +
+        (currentMoment.getMonth() + 1).toString().padStart(2, '0') +
+        '-' +
         currentMoment.getDate().toString().padStart(2, '0');
 
-    const time = currentMoment.getHours().toString().padStart(2, '0') + ":" +
-        currentMoment.getMinutes().toString().padStart(2, '0') + ":" +
+    const time =
+        currentMoment.getHours().toString().padStart(2, '0') +
+        ':' +
+        currentMoment.getMinutes().toString().padStart(2, '0') +
+        ':' +
         currentMoment.getSeconds().toString().padStart(2, '0');
 
     return (
-        <div className='Timeline'>
+        <div className="Timeline">
             <input
-                className='Timeline__input'
+                className="Timeline__input"
                 type="range"
                 min={MIN_MOMENT}
                 max={MAX_MOMENT}
@@ -42,12 +48,12 @@ const Timeline: React.FC<TimelineProps> = ({initialMoment, onUpdate}) => {
                 onChange={onChangeThrottled}
                 defaultValue={moment}
             />
-            <div className='Timeline__date'>
+            <div className="Timeline__date">
                 <span>{date}</span>
                 <span>{time}</span>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export { Timeline };
+export {Timeline};

@@ -10,14 +10,14 @@ type TrainMarkerProps = Ymaps & {
     train: {
         name?: string;
         train_index: string;
-    }
+    };
     event: TimeEventTrain;
     order?: number;
     onClick?: () => void;
     active?: boolean;
-}
+};
 
-export const TrainMarker = withMap(function({train, event, order, onClick, active, ymaps}: TrainMarkerProps) {
+export const TrainMarker = withMap(function ({train, event, order, onClick, active, ymaps}: TrainMarkerProps) {
     let className = 'TrainMarker';
     if (active) {
         className += ' TrainMarker_active';
@@ -25,7 +25,6 @@ export const TrainMarker = withMap(function({train, event, order, onClick, activ
     if (onClick) {
         className += ' TrainMarker_interactive';
     }
-
 
     return (
         <ymaps.YMapMarker

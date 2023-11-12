@@ -10,9 +10,9 @@ type WagonMarkerProps = Ymaps & {
     event: TimeEventWagon;
     order?: number;
     active?: boolean;
-}
+};
 
-export const WagonMarker = withMap(function({wagon, event, order, active, ymaps}: WagonMarkerProps) {
+export const WagonMarker = withMap(function ({wagon, event, order, active, ymaps}: WagonMarkerProps) {
     let className = 'WagonMarker';
     if (active) {
         className += ' WagonMarker_active';
