@@ -5,6 +5,7 @@ import {Timeline} from '../Timeline';
 import {getTrainsList} from '../requests';
 import { pushHistory } from '../utils';
 import {INITIAL_MOMENT, TIME_WINDOW} from '../withMoment';
+import { Loading } from '../Loading';
 
 interface Train {
     events: TimeEventTrain[];
@@ -15,11 +16,17 @@ interface Train {
 export function MainView() {
     const [trains, setTrains] = React.useState<Train[]>();
     const [moment, setMoment] = React.useState<number>(INITIAL_MOMENT);
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
+        setLoading(true);
         pushHistory('', {moment});
         getTrainsList(moment, TIME_WINDOW).then((data) => {
             setTrains(data.trains);
+            setLoading(false);
+        }).catch((e) => {
+            console.error(e);
+            setLoading(false);
         })
     }, [moment]);
 
@@ -31,6 +38,7 @@ export function MainView() {
 
     return (
         <>
+            <Loading loading={loading} />
             {trains.map((train, index) => (
                 <TrainMarker
                     key={index}
