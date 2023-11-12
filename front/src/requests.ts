@@ -11,6 +11,10 @@ export function getTrainTimeLine(id: string, moment: number, wagonId?: number): 
     return request(`${backendUrl}/train/${id}/timeline?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}`);
 }
 
+export function getTrainTimeLineNonStamp(id: string): Promise<TrainTimeline> {
+    return request(`${backendUrl}/train/${id}/timeline`);
+}
+
 export function getTrainsList(moment: number, timeWindow?: number) {
     return request(`${backendUrl}/trains?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}&window_secs=${timeWindow}`);
 }
@@ -21,6 +25,10 @@ export function getStations() {
 
 export async function getWagonTimeLine(id: string, moment: number): Promise<WagonTimeline> {
     return request(`${backendUrl}/vagon/${id}/timeline?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}`);
+}
+
+export async function getWagonTimeLineNonStamp(id: string): Promise<WagonTimeline> {
+    return request(`${backendUrl}/vagon/${id}/timeline`);
 }
 
 export async function getIdealPath(trainId: string): Promise<IdealPath> {

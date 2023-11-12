@@ -1,7 +1,14 @@
 import {Map} from './Map';
+import { SearchPanel } from './components/SearchPanel';
 
 function App() {
-    return <Map />;
+  return (
+    <>
+      <SearchPanel />
+      <Map />
+    </>
+  )
 }
+
 
 export default App;
