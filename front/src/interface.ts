@@ -57,3 +57,12 @@ export interface WagonTimelineParsed extends WagonTimeline {
 }
 
 export type SetMapLocation = React.Dispatch<React.SetStateAction<YMapLocationRequest>>;
+
+export interface IdealPath {
+    path: {
+        id: number;
+        name: string;
+        latitude: number;
+        longitude: number;
+    }[]
+}

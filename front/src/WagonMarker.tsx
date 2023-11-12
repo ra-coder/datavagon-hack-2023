@@ -9,14 +9,20 @@ type WagonMarkerProps = Ymaps & {
     wagon: Wagon;
     event: TimeEventWagon;
     order?: number;
+    active?: boolean;
 }
 
-export const WagonMarker = withMap(function({wagon, event, order, ymaps}: WagonMarkerProps) {
+export const WagonMarker = withMap(function({wagon, event, order, active, ymaps}: WagonMarkerProps) {
+    let className = 'WagonMarker';
+    if (active) {
+        className += ' WagonMarker_active';
+    }
+
     return (
         <ymaps.YMapMarker coordinates={getLngLat(event)} properties={{hint: {type: 'wagon', ...wagon, ...event}}}>
-            <div className="WagonMarker">
+            <div className={className}>
                 <WagonSvg />
-                {order}
+                <span>{order}</span>
             </div>
         </ymaps.YMapMarker>
     );
