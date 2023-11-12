@@ -45,6 +45,8 @@ async def get_table_calendar(
         join train on train.train_index = vagon_location_stream.train_index
         join vagon on vagon_location_stream.vagon_id = vagon.id
         where vagon_location_stream.vagon_id = :vagon_id
+                AND
+            (:on_timestamp :: int isnull  OR vagon_location_stream.moment < to_timestamp(:on_timestamp :: int))        
         group by vagon_id, vagon.name;
     """)
 
@@ -53,7 +55,10 @@ async def get_table_calendar(
     async with AsyncSession(engine) as session:
         result = await session.execute(
             query,
-            {"vagon_id": vagon_id},
+            {
+                "vagon_id": vagon_id,
+                "on_timestamp": on_timestamp,
+            },
         )
         data = result.fetchone()
 
