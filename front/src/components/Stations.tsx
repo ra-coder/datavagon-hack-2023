@@ -1,7 +1,8 @@
 import React from 'react';
-import {Ymaps, withMap} from './withMap';
+import {Ymaps, withMap} from '../hooks/withMap';
 import {BehaviorMapEventHandler, LngLatBounds} from '@yandex/ymaps3-types';
-import { getStations } from './requests';
+import { getStations } from '../requests';
+import { StationMarker } from './StationMarker';
 
 type StationsProps = Ymaps & {
     initialBounds: LngLatBounds;
@@ -43,9 +44,7 @@ function IntStations({initialBounds, ymaps}: StationsProps) {
                 stations
                     .filter((s) => isInBounds(s, bounds))
                     .map((s) => (
-                        <ymaps.YMapMarker key={s.id} id={s.id.toString()} coordinates={[s.longitude, s.latitude]}>
-                            <div style={{width: 10, height: 16, background: '#ccc', transform: 'translate(-50%, -50%)'}} />
-                        </ymaps.YMapMarker>
+                        <StationMarker dislocation={s} />
                     ))
             }
             <ymaps.YMapListener onActionEnd={onActionEnd} />

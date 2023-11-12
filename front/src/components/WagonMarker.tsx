@@ -1,6 +1,6 @@
-import {Ymaps, withMap} from './withMap';
-import {getLngLat} from './utils';
-import {TimeEventWagon, Wagon} from './interface';
+import {Ymaps, withMap} from '../hooks/withMap';
+import {getLngLat} from '../utils';
+import {TimeEventWagon, Wagon} from '../interface';
 import {WagonSvg} from './WagonSvg';
 
 import './WagonMarker.css';

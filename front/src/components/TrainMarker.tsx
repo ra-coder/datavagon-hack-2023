@@ -1,7 +1,7 @@
 import React from 'react';
-import {Ymaps, withMap} from './withMap';
-import {getLngLat} from './utils';
-import {TimeEventTrain} from './interface';
+import {Ymaps, withMap} from '../hooks/withMap';
+import {getLngLat} from '../utils';
+import {TimeEventTrain} from '../interface';
 import {TrainSvg} from './TrainSvg';
 
 import './TrainMarker.css';

@@ -2,7 +2,7 @@ import React from 'react';
 import {debounce} from 'lodash'
 
 import './Timeline.css';
-import { MAX_MOMENT, MIN_MOMENT, useMoment } from './withMoment';
+import { MAX_MOMENT, MIN_MOMENT, useMoment } from '../hooks/useMoment';
 
 const DELAY = 300;
 const STEP = 10 * 60 * 1000;

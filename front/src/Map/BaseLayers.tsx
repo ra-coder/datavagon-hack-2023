@@ -1,4 +1,4 @@
-import {Ymaps, withMap} from "../withMap";
+import {Ymaps, withMap} from '../hooks/withMap';
 
 export const BaseLayers = withMap(function({ymaps}: Ymaps) {
     return (

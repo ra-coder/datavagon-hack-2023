@@ -1,10 +1,10 @@
 import React from 'react';
-import {TrainMarker} from '../TrainMarker';
+import {TrainMarker} from '../components/TrainMarker';
 import {TimeEventTrain} from '../interface';
-import {Timeline} from '../Timeline';
+import {Timeline} from '../components/Timeline';
 import {getTrainsList} from '../requests';
-import { pushHistory } from '../utils';
-import {INITIAL_MOMENT, TIME_WINDOW} from '../withMoment';
+import {pushHistory} from '../hooks/useHistory';
+import {INITIAL_MOMENT, TIME_WINDOW} from '../hooks/useMoment';
 
 interface Train {
     events: TimeEventTrain[];

@@ -1,10 +1,10 @@
 import React from 'react';
 import {YMapLocationRequest} from '@yandex/ymaps3-types';
-import {withMap, Ymaps} from '../withMap';
+import {withMap, Ymaps} from '../hooks/withMap';
 import {BaseLayers} from './BaseLayers';
 import {PathView} from './PathView';
-import {TrainHint} from '../TrainHint';
-import {WagonHint} from '../WagonHint';
+import {TrainHint} from '../components/TrainHint';
+import {WagonHint} from '../components/WagonHint';
 
 const INITIAL_LOCATION: YMapLocationRequest = {center: [37.623082, 55.75254], zoom: 9};
 

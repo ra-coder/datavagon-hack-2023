@@ -1,6 +1,6 @@
 import React from 'react';
-import {Ymaps, withMap} from './withMap';
-import {stringifyDate} from './utils';
+import {Ymaps, withMap} from '../hooks/withMap';
+import {stringifyDate} from '../utils';
 
 export const TrainHint = withMap(function({ymaps}: Ymaps) {
     const ctx = React.useContext(ymaps.YMapHintContext);
@@ -8,7 +8,7 @@ export const TrainHint = withMap(function({ymaps}: Ymaps) {
     if (ctx?.hint.type !== 'train') return null;
 
     return <div className="hint">
-        {ctx?.hint.moment && <div>{stringifyDate(new Date(ctx.hint.moment)).join(' ')}</div>}
+        {ctx?.hint.moment && <div>{stringifyDate(new Date(ctx.hint.moment * 1000)).join(' ')}</div>}
         <br/>
         {ctx?.hint.train_index && <div>Поезд №{ctx.hint.train_index}</div>}
         {ctx?.hint.dislocation && <div>Станция №{ctx.hint.dislocation.id}</div>}
