@@ -49,7 +49,7 @@ export function MainView() {
                     }}
                 />
             ))}
-          <Timeline initialMoment={INITIAL_MOMENT} onUpdate={onTimelineUpdate} />
+            <Timeline initialMoment={INITIAL_MOMENT} onUpdate={onTimelineUpdate} />
         </>
     );
 }
