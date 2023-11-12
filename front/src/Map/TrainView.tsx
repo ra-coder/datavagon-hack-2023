@@ -1,12 +1,13 @@
 import React from 'react';
-import {Ymaps, withMap} from '../withMap';
+import {Ymaps, withMap} from '../hooks/withMap';
 import {compactTrainTimeLineEvents, getLngLat} from '../utils';
-import {SetMapLocation, TrainTimeline} from '../interface';
-import {TrainPanel} from '../TrainPanel';
-import {getTrainTimeLine} from '../requests';
+import {IdealPath, SetMapLocation, TrainTimeline} from '../interface';
+import {TrainPanel} from '../components/TrainPanel';
+import {getIdealPath, getTrainTimeLine} from '../requests';
 import {LngLatBounds} from '@yandex/ymaps3-types';
-import {TrainMarker} from '../TrainMarker';
-import { Loading } from '../Loading';
+import {TrainMarker} from '../components/TrainMarker';
+import {Loading} from '../components/Loading';
+import {StationMarker} from '../components/StationMarker';
 
 type TrainProps = Ymaps & {
     id: string;
@@ -18,37 +19,43 @@ type TrainProps = Ymaps & {
 export const TrainView = withMap(function({id, moment, wagonId, setLocation, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<TrainTimeline>();
     const [loading, setLoading] = React.useState(false);
+    const [idelPath, setIdealPath] = React.useState<IdealPath>({path: []});
 
     React.useEffect(() => {
         setLoading(true);
-        getTrainTimeLine(id, moment, wagonId).then((data) => {
-            const detail = (data as unknown as { detail: string }).detail
-            if (detail) {
-                alert(detail);
-                setLoading(false);
-                return;
-            }
-            const nextTimeline = {
-                ...data,
-                events: compactTrainTimeLineEvents(data, wagonId)
-            };
-            setTimeline(nextTimeline);
+        Promise.all([
+            getTrainTimeLine(id, moment, wagonId).then((data) => {
+                const detail = (data as unknown as { detail: string }).detail
+                if (detail) {
+                    alert(detail);
+                    setLoading(false);
+                    return;
+                }
+                const nextTimeline = {
+                    ...data,
+                    events: compactTrainTimeLineEvents(data, wagonId)
+                };
+                setTimeline(nextTimeline);
+            }),
+            getIdealPath(id).then((data) => {
+                setIdealPath(data);
 
-            const bounds = nextTimeline.events.reduce<LngLatBounds>((memo, event) => {
-                memo[0][0] = Math.min(memo[0][0], event.dislocation.longitude);
-                memo[0][1] = Math.min(memo[0][1], event.dislocation.latitude);
-                memo[1][0] = Math.max(memo[1][0], event.dislocation.longitude);
-                memo[1][1] = Math.max(memo[1][1], event.dislocation.latitude);
+                const bounds = data.path.reduce<LngLatBounds>((memo, p) => {
+                    memo[0][0] = Math.min(memo[0][0], p.longitude);
+                    memo[0][1] = Math.min(memo[0][1], p.latitude);
+                    memo[1][0] = Math.max(memo[1][0], p.longitude);
+                    memo[1][1] = Math.max(memo[1][1], p.latitude);
 
-                return memo;
-            }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
+                    return memo;
+                }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
-            setLocation({bounds});
-            setLoading(false);
-        }).catch((e) => {
+                setLocation({bounds});
+            })
+        ]).catch((e) => {
             console.error(e);
+        }).finally(() => {
             setLoading(false);
-        })
+        });
     }, [id, setLocation, moment, wagonId]);
 
     if (loading) return <Loading loading={loading} />
@@ -61,13 +68,21 @@ export const TrainView = withMap(function({id, moment, wagonId, setLocation, yma
                     key={index}
                     event={event}
                     train={timeline.train}
-                    order={index + 1}
-                    active={index === timeline.events.length - 1}
+                    order={timeline.events.length - index}
+                    active={index === 0}
                 />
             ))}
             <ymaps.YMapFeature
                 geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}}
                 style={{stroke: [{width: 5, color: '#aaaaff'}]}}
+            />
+
+            {idelPath.path.map((p, index) => (
+                <StationMarker key={index} dislocation={p} />
+            ))}
+            <ymaps.YMapFeature
+                geometry={{type: 'LineString', coordinates: idelPath.path.map(getLngLat)}}
+                style={{stroke: [{width: 5, color: '#aaffaa'}]}}
             />
             <TrainPanel id={id} timeline={timeline} />
         </>

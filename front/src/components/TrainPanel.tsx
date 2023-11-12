@@ -1,28 +1,9 @@
 import React from 'react';
-import {pushHistory, stringifyDate} from './utils';
-import type {TimeEventTrain, TrainTimeline} from './interface';
+import {stringifyDate} from '../utils';
+import {pushHistory} from '../hooks/useHistory';
+import type {TimeEventTrain, TrainTimeline} from '../interface';
 
 import './TrainPanel.css';
-
-/*
-train_index
-6484-047-20701
-7475-330-62
-6999-467-7475
-7423-131-6999
-7475-311-62
-6999-427-7475
-20713-263-6999
-7475-269-62
-7475-268-62
-6999-392-7475
-1043-198-20713
-7464-024-6999
-6999-132-7464
-6479-005-6484
-6484-500-6999
-6484-500-6522
-*/
 
 interface TrainPanelProps {
     id: string;

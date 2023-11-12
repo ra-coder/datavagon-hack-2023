@@ -1,6 +1,6 @@
 import React from 'react';
-import {Ymaps, withMap} from './withMap';
-import {stringifyDate} from './utils';
+import {Ymaps, withMap} from '../hooks/withMap';
+import {stringifyDate} from '../utils';
 
 export const WagonHint = withMap(function({ymaps}: Ymaps) {
     const ctx = React.useContext(ymaps.YMapHintContext);

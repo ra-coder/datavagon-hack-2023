@@ -1,64 +1,7 @@
 import {LngLat} from '@yandex/ymaps3-types';
 import type {Dislocation, TimeEventTrain, TrainTimeline} from './interface';
-import React from 'react';
 
-const historyWatchers: (() => void)[] = [];
-const pushHistory = (title: string, query?: Record<string, any>) => {
-    const searchParams = new URLSearchParams(window.location.search);
-    if (query) {
-        Object.keys(query).forEach((key) => {
-            searchParams.set(key, query[key].toString());
-        })
-    }
-
-    window.history.pushState(null, '', `/${title}?${searchParams.toString()}`);
-    historyWatchers.forEach((watcher) => watcher());
-}
-
-window.onpopstate = () => {
-    historyWatchers.forEach((watcher) => watcher());
-};
-
-type AvailableType = 'train' | 'wagon' | 'main';
-export interface UrlParams {
-    type: AvailableType;
-    id?: string;
-    moment?: number;
-    wagonId?: number;
-}
-
-const availableTypes: AvailableType[] = ['train', 'wagon'];
-export function getParamsFromPath(): UrlParams {
-    const path = window.location.pathname;
-    const pathArryied = path.split('/');
-    const type = pathArryied[1] as AvailableType;
-    const id = pathArryied[2];
-
-    const searchParams = new URLSearchParams(window.location.search);
-    const moment = Number(searchParams.get('moment')) || undefined;
-    const wagonId = Number(searchParams.get('wagonId')) || undefined;
-
-    return {
-        type: availableTypes.includes(type) ? type : 'main',
-        id,
-        moment,
-        wagonId,
-    };
-}
-
-export function useWatchHistory(): UrlParams {
-    const [params, setParams] = React.useState(getParamsFromPath());
-
-    React.useEffect(() => {
-        historyWatchers.push(() => {
-            setParams(getParamsFromPath());
-        });
-    }, []);
-
-    return params;
-}
-
-const stringifyDate = (dateMoment: Date): [string, string] => {
+export const stringifyDate = (dateMoment: Date): [string, string] => {
     const date = dateMoment.getFullYear() + "-" +
     (dateMoment.getMonth() + 1).toString().padStart(2, '0') + "-" +
     dateMoment.getDate().toString().padStart(2, '0');
@@ -69,8 +12,9 @@ const stringifyDate = (dateMoment: Date): [string, string] => {
 
     return [date, time];
 }
-export function getLngLat(event: {dislocation: Dislocation}): LngLat {
-    return [event.dislocation.longitude, event.dislocation.latitude];
+export function getLngLat(event: Dislocation | {dislocation: Dislocation}): LngLat {
+    const point = 'dislocation' in event ? event.dislocation : event;
+    return [point.longitude, point.latitude];
 }
 
 export function compactTrainTimeLineEvents(timeline: TrainTimeline, wagonId?: number) {
@@ -100,8 +44,3 @@ export function compactTrainTimeLineEvents(timeline: TrainTimeline, wagonId?: nu
 
     }, [])
 }
-
-export {
-    pushHistory,
-    stringifyDate,
-};

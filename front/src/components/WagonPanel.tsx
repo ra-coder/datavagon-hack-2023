@@ -1,34 +1,10 @@
 import React from 'react';
 
-import { pushHistory, stringifyDate } from './utils';
-import type {Wagon, WagonEventsParsed, WagonTimelineParsed} from './interface';
+import {stringifyDate} from '../utils';
+import {pushHistory} from '../hooks/useHistory';
+import type {Wagon, WagonEventsParsed, WagonTimelineParsed} from '../interface';
 
 import './WagonPanel.css';
-
-/*
-id
-3001
-9596
-5952
-6978
-8247
-5226
-8680
-5254
-8907
-8396
-7001
-9076
-163
-4515
-3581
-3472
-7989
-7839
-1738
-3547
-7403
-*/
 
 const DAY_SECONDS = 86400;
 const HOUR_SECONDS = 3600;

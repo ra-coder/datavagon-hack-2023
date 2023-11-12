@@ -1,6 +1,9 @@
 .WagonMarker {
-    width: 25px;
-    height: 25px;
+    width: 26px;
     background: #acaccc;
     transform: translate(-50%, -50%);
+}
+
+.WagonMarker_active {
+    background: #aaaaff;
 }

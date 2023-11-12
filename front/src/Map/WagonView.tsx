@@ -1,5 +1,5 @@
 import React from 'react';
-import {Ymaps, withMap} from '../withMap';
+import {Ymaps, withMap} from '../hooks/withMap';
 import type {
     Dislocation,
     SetMapLocation,
@@ -9,10 +9,10 @@ import type {
 } from '../interface';
 import { getWagonTimeLine } from '../requests';
 import {LngLatBounds} from '@yandex/ymaps3-types';
-import { WagonPanel } from '../WagonPanel';
-import { Loading } from '../Loading';
+import { WagonPanel } from '../components/WagonPanel';
+import { Loading } from '../components/Loading';
 import {getLngLat} from '../utils';
-import { WagonMarker } from '../WagonMarker';
+import { WagonMarker } from '../components/WagonMarker';
 
 type WagonViewProps = Ymaps & {
     id: string;
@@ -119,9 +119,9 @@ export const WagonView = withMap(function({id, moment, setLocation, ymaps}: Wago
             });
 
             setLocation({bounds});
-            setLoading(false);
         }).catch((e) => {
             console.error(e);
+        }).finally(() => {
             setLoading(false);
         })
     }, [id, setLocation, moment]);

@@ -1,12 +1,11 @@
 .TrainMarker {
-    width: 25px;
-    height: 25px;
+    width: 26px;
     background: #cacaca;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -13px);
 }
 
 .TrainMarker_active {
-    background: #aaeeaa;
+    background: #aaaaff;
 }
 
 .TrainMarker_interactive {

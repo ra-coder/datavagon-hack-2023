@@ -1,4 +1,4 @@
-import {Ymaps, withMap} from "../withMap";
+import {Ymaps, withMap} from '../hooks/withMap';
 
 export const BaseLayers = withMap(function({ymaps}: Ymaps) {
     return (
@@ -26,7 +26,7 @@ export const BaseLayers = withMap(function({ymaps}: Ymaps) {
                 id="shadow"
                 raster={{
                     type: 'ground',
-                    fetchTile: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mMUqWfAAIxDWRAAkfgFyWW0I8AAAAAASUVORK5CYII='
+                    fetchTile: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mMUmcmAARiHsiAABU0GzXs/qVUAAAAASUVORK5CYII='
                 }}
             />
             <ymaps.YMapLayer
