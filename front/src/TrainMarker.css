@@ -1,0 +1,14 @@
+.TrainMarker {
+    width: 25px;
+    height: 25px;
+    background: #cacaca;
+    transform: translate(-50%, -50%);
+}
+
+.TrainMarker_active {
+    background: #aaeeaa;
+}
+
+.TrainMarker_interactive {
+    cursor: pointer;
+}

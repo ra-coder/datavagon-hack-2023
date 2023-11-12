@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { stringifyDate } from './utils';
-import type {Vagon, WagonEventsParsed} from './interface';
+import { pushHistory, stringifyDate } from './utils';
+import type {Wagon, WagonEventsParsed, WagonTimelineParsed} from './interface';
 
 import './WagonPanel.css';
 
@@ -35,8 +35,8 @@ const HOUR_SECONDS = 3600;
 
 interface WagonPanelProps {
     id: string;
-    timeline: WagonEventsParsed[];
-    wagon: Vagon;
+    timeline: WagonTimelineParsed;
+    wagon: Wagon;
 }
 
 const WagonPanel: React.FC<WagonPanelProps> = ({
@@ -72,16 +72,23 @@ const WagonPanel: React.FC<WagonPanelProps> = ({
         )
     }
 
-    const renderEvent = (ev: WagonEventsParsed) => {
+    const renderEvent = (ev: WagonEventsParsed, i: number) => {
         const train = ev.train;
         const route = ev.route;
         const moment = ev.moment;
         const [startDate, startTime]  = stringifyDate(new Date(moment.start * 1000))
         const [endDate, endTime]  = stringifyDate(new Date(moment.end * 1000))
-        const trainLine = <a href={`/train/${train.train_index}?wagonId=${wagon.id}`}>{train.name} {train.train_index}</a>
+        const trainLine = (
+            <a
+                className='Link'
+                onClick={() => pushHistory(`train/${train.train_index}`, {wagonId: wagon.id})}
+            >
+                {train.name} {train.train_index}
+            </a>
+        )
 
         return (
-            <div key={ev.train.train_index} className='WagonPanel__time-event'>
+            <div key={i} className='WagonPanel__time-event'>
                 {renderRow('Поезд', trainLine)}
                 {renderRow('Время в пути', renderDuration(ev.duration))}
                 {renderRow('Станции', `${route.start.id} ${route.end.id}`)}
@@ -97,7 +104,7 @@ const WagonPanel: React.FC<WagonPanelProps> = ({
                 {wagon.name} {wagon.id}
             </div>
             <div className='WagonPanel__time-events'>
-                {timeline.map(renderEvent)}
+                {timeline.parsedEvents.map(renderEvent)}
             </div>
         </div>
     )

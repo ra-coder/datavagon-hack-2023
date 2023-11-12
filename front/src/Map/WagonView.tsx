@@ -5,21 +5,19 @@ import type {
     SetMapLocation,
     TimeEventWagon,
     WagonEventsParsed,
-    WagonTimeline
+    WagonTimelineParsed
 } from '../interface';
-import { getWagonInfo } from '../requests';
+import { getWagonTimeLine } from '../requests';
+import {LngLatBounds} from '@yandex/ymaps3-types';
 import { WagonPanel } from '../WagonPanel';
 import { Loading } from '../Loading';
+import {getLngLat} from '../utils';
+import { WagonMarker } from '../WagonMarker';
 
-type WagonProps = Ymaps & {
+type WagonViewProps = Ymaps & {
     id: string;
     moment: number;
     setLocation: SetMapLocation;
-}
-
-
-interface WagonInfoTimeline extends WagonTimeline {
-    timeline: WagonEventsParsed[];
 }
 
 const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] => {
@@ -60,54 +58,54 @@ const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] =>
     return res;
 }
 
-export const WagonView = withMap(function({id, moment, setLocation, ymaps}: WagonProps) {
-    const [wagonInfo, setWagonInfo] = React.useState<WagonInfoTimeline>();
+export const WagonView = withMap(function({id, moment, setLocation, ymaps}: WagonViewProps) {
+    const [timeline, setTimeline] = React.useState<WagonTimelineParsed>();
     const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
         setLoading(true);
-        getWagonInfo(id/* , moment */).then((data) => {
-            const wagonInfoTimeline = {
+        getWagonTimeLine(id, moment).then((data) => {
+            const nextTimeline = {
                 ...data,
-                timeline: parseWagonEvents(data.events)
+                parsedEvents: parseWagonEvents(data.events)
             };
-            setWagonInfo(wagonInfoTimeline);
+            setTimeline(nextTimeline);
 
-            // const bounds = nextTimeline.events.reduce<LngLatBounds>((memo, event) => {
-            //     memo[0][0] = Math.min(memo[0][0], event.dislocation.longitude);
-            //     memo[0][1] = Math.min(memo[0][1], event.dislocation.latitude);
-            //     memo[1][0] = Math.max(memo[1][0], event.dislocation.longitude);
-            //     memo[1][1] = Math.max(memo[1][1], event.dislocation.latitude);
+            const bounds = nextTimeline.events.reduce<LngLatBounds>((memo, event) => {
+                memo[0][0] = Math.min(memo[0][0], event.dislocation.longitude);
+                memo[0][1] = Math.min(memo[0][1], event.dislocation.latitude);
+                memo[1][0] = Math.max(memo[1][0], event.dislocation.longitude);
+                memo[1][1] = Math.max(memo[1][1], event.dislocation.latitude);
 
-            //     return memo;
-            // }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
+                return memo;
+            }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
-            // setLocation({bounds});
+            setLocation({bounds});
             setLoading(false);
         }).catch((e) => {
             console.error(e);
             setLoading(false);
         })
-    }, [id, setLocation]);
+    }, [id, setLocation, moment]);
 
     if (loading) return <Loading loading={loading} />
-    if (!wagonInfo) return null;
+    if (!timeline) return null;
 
     return (
         <>
-            {/* {timeline.events.map((event, index) => (
-                <TrainMarker
+            {timeline.events.map((event, index) => (
+                <WagonMarker
                     key={index}
                     event={event}
-                    train={timeline.train}
+                    wagon={timeline.vagon}
                     order={index + 1}
                 />
             ))}
             <ymaps.YMapFeature
                 geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}}
-                style={{stroke: [{width: 5, color: '#aaffaa'}]}}
-            /> */}
-            <WagonPanel id={id} timeline={wagonInfo.timeline} wagon={wagonInfo.vagon} />
+                style={{stroke: [{width: 5, color: '#aafafa'}]}}
+            />
+            <WagonPanel id={id} timeline={timeline} wagon={timeline.vagon} />
         </>
     );
 });

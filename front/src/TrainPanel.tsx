@@ -1,5 +1,5 @@
 import React from 'react';
-import {stringifyDate} from './utils';
+import {pushHistory, stringifyDate} from './utils';
 import type {TimeEventTrain, TrainTimeline} from './interface';
 
 import './TrainPanel.css';
@@ -53,11 +53,16 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
                     {list.map((val, i) => {
                         const searchParams = new URLSearchParams(window.location.search);
                         const wagonId = Number(searchParams.get('wagonId')) || undefined;
-                        const className = val === wagonId ? 'TrainPanel__hightlight' : '';
+                        const className = val === wagonId ? 'TrainPanel__hightlight Link' : 'Link';
 
                         return (
                             <li key={i}>
-                                <a href={`/wagon/${val}`} className={className}>{val}</a>
+                                <a
+                                    onClick={() => pushHistory(`wagon/${val}`)}
+                                    className={className}
+                                >
+                                    {val}
+                                </a>
                             </li>
                         )
                     })}

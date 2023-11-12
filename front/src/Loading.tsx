@@ -1,11 +1,6 @@
 import React from 'react';
 
 import './Loading.css';
-/* @ts-ingore */
-// import Wagon from './wagon.png';
-
-
-// console.log(Wagon);
 
 interface Props {
     loading: boolean;

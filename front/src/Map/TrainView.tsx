@@ -49,7 +49,7 @@ export const TrainView = withMap(function({id, moment, wagonId, setLocation, yma
             console.error(e);
             setLoading(false);
         })
-    }, [id, setLocation]);
+    }, [id, setLocation, moment, wagonId]);
 
     if (loading) return <Loading loading={loading} />
     if (!timeline) return null;
@@ -62,11 +62,12 @@ export const TrainView = withMap(function({id, moment, wagonId, setLocation, yma
                     event={event}
                     train={timeline.train}
                     order={index + 1}
+                    active={index === timeline.events.length - 1}
                 />
             ))}
             <ymaps.YMapFeature
                 geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}}
-                style={{stroke: [{width: 5, color: '#aaffaa'}]}}
+                style={{stroke: [{width: 5, color: '#aaaaff'}]}}
             />
             <TrainPanel id={id} timeline={timeline} />
         </>

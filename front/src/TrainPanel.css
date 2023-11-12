@@ -21,6 +21,10 @@
 
 }
 
+.TrainPanel__row li a{
+    cursor: pointer;
+}
+
 .TrainPanel__row span {
     font-weight: bold;
 }
@@ -49,7 +53,13 @@
     align-items: center;
 }
 
+.Link {
+    text-decoration: underline;
+    color: blue;
+}
+
 .TrainPanel__hightlight {
-    text-decoration: none;
-    color: seagreen;
+    text-decoration: none !important;
+    color: seagreen !important;
+    font-weight: bold;
 }

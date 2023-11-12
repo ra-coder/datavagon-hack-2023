@@ -3,8 +3,8 @@ import {useWatchHistory} from '../utils'
 import {MainView} from './MainView';
 import {TrainView} from './TrainView';
 import {SetMapLocation} from '../interface';
-import { INITIAL_MOMENT } from '../withMoment';
-import { WagonView } from './WagonView';
+import {INITIAL_MOMENT} from '../withMoment';
+import {WagonView} from './WagonView';
 
 interface PathViewProps {
     setLocation: SetMapLocation;
