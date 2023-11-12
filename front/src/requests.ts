@@ -1,4 +1,4 @@
-import type {TrainTimeline, WagonTimeline} from './interface';
+import type {IdealPath, TrainTimeline, WagonTimeline} from './interface';
 
 export const backendUrl = 'http://158.160.26.131:8000/api/v1';
 
@@ -21,6 +21,11 @@ export function getStations() {
 
 export async function getWagonTimeLine(id: string, moment: number): Promise<WagonTimeline> {
     return request(`${backendUrl}/vagon/${id}/timeline?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}`);
+}
+
+export async function getIdealPath(trainId: string): Promise<IdealPath> {
+    const [from, , to] = trainId.split('-');
+    return request(`${backendUrl}/deikstra?from_station_id=${from}&to_station_id=${to}`);
 }
 
 function request(url: string) {

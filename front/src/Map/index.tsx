@@ -13,7 +13,7 @@ export const Map = withMap(function ({ymaps}: Ymaps) {
     const [location, setLocation] = React.useState<YMapLocationRequest>(INITIAL_LOCATION);
 
     return <React.Fragment>
-        <ymaps.YMap location={location} projection={projection.current} >
+        <ymaps.YMap location={location} projection={projection.current} margin={[0, 0, 0, 400]}>
             <BaseLayers />
             <PathView setLocation={setLocation}/>
             <ymaps.YMapHint hint={object => object?.properties?.hint}>

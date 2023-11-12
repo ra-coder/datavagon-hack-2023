@@ -69,8 +69,9 @@ const stringifyDate = (dateMoment: Date): [string, string] => {
 
     return [date, time];
 }
-export function getLngLat(event: {dislocation: Dislocation}): LngLat {
-    return [event.dislocation.longitude, event.dislocation.latitude];
+export function getLngLat(event: Dislocation | {dislocation: Dislocation}): LngLat {
+    const point = 'dislocation' in event ? event.dislocation : event;
+    return [point.longitude, point.latitude];
 }
 
 export function compactTrainTimeLineEvents(timeline: TrainTimeline, wagonId?: number) {
