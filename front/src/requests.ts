@@ -4,7 +4,10 @@ export const backendUrl = 'http://158.160.26.131:8000/api/v1';
 
 const MOMENT_TO_TIMESTAMP = 1 / 1000;
 
-export function getTrainTimeLine(id: string, moment: number): Promise<TrainTimeline> {
+export function getTrainTimeLine(id: string, moment: number, wagonId?: number): Promise<TrainTimeline> {
+    if (wagonId) {
+        return request(`${backendUrl}/train/${id}/timeline`);
+    }
     return request(`${backendUrl}/train/${id}/timeline?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}`);
 }
 

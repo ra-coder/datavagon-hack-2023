@@ -7,8 +7,6 @@ export const TrainHint = withMap(function({ymaps}: Ymaps) {
 
     if (ctx?.hint.type !== 'train') return null;
 
-    console.log(ctx.hint);
-
     return <div className="hint">
         {ctx?.hint.moment && <div>{stringifyDate(new Date(ctx.hint.moment)).join(' ')}</div>}
         <br/>

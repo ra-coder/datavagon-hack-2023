@@ -34,3 +34,17 @@
 .WagonPanel__row span {
     font-weight: bold;
 }
+
+.WagonPanel__red {
+    color: red;
+}
+
+.Link {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+
+.WagonPanel__green {
+    color: green;
+}

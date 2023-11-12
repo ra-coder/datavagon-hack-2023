@@ -52,3 +52,14 @@
     flex-direction: column;
     align-items: center;
 }
+
+.Link {
+    text-decoration: underline;
+    color: blue;
+}
+
+.TrainPanel__hightlight {
+    text-decoration: none !important;
+    color: seagreen !important;
+    font-weight: bold;
+}

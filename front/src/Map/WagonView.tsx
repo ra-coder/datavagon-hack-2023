@@ -1,10 +1,17 @@
 import React from 'react';
 import {Ymaps, withMap} from '../withMap';
-import {getLngLat} from '../utils';
-import {Dislocation, SetMapLocation, TimeEventWagon, WagonEventsParsed, WagonTimeline, WagonTimelineParsed} from '../interface';
-import {WagonPanel} from '../WagonPanel';
-import {getWagonTimeLine} from '../requests';
+import type {
+    Dislocation,
+    SetMapLocation,
+    TimeEventWagon,
+    WagonEventsParsed,
+    WagonTimelineParsed
+} from '../interface';
+import { getWagonTimeLine } from '../requests';
 import {LngLatBounds} from '@yandex/ymaps3-types';
+import { WagonPanel } from '../WagonPanel';
+import { Loading } from '../Loading';
+import {getLngLat} from '../utils';
 import { WagonMarker } from '../WagonMarker';
 
 type WagonViewProps = Ymaps & {
@@ -53,8 +60,10 @@ const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] =>
 
 export const WagonView = withMap(function({id, moment, setLocation, ymaps}: WagonViewProps) {
     const [timeline, setTimeline] = React.useState<WagonTimelineParsed>();
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
+        setLoading(true);
         getWagonTimeLine(id, moment).then((data) => {
             const nextTimeline = {
                 ...data,
@@ -72,9 +81,14 @@ export const WagonView = withMap(function({id, moment, setLocation, ymaps}: Wago
             }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
             setLocation({bounds});
+            setLoading(false);
+        }).catch((e) => {
+            console.error(e);
+            setLoading(false);
         })
     }, [id, setLocation, moment]);
 
+    if (loading) return <Loading loading={loading} />
     if (!timeline) return null;
 
     return (

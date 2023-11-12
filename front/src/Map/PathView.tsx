@@ -12,14 +12,24 @@ interface PathViewProps {
 
 export function PathView({setLocation}: PathViewProps) {
     const params = useWatchHistory();
+    const moment = params.moment || INITIAL_MOMENT;
 
     switch (params.type) {
         case 'main':
            return <MainView />;
         case 'train':
-            return <TrainView id={params.id!} moment={params.moment || INITIAL_MOMENT} setLocation={setLocation}/>;
+            return <TrainView
+                id={params.id!}
+                moment={moment}
+                setLocation={setLocation}
+                wagonId={params.wagonId}
+            />;
         case 'wagon':
-            return <WagonView id={params.id!} moment={params.moment || INITIAL_MOMENT} setLocation={setLocation}/>;
+            return <WagonView
+                id={params.id!}
+                moment={moment}
+                setLocation={setLocation}
+            />;
         default:
             return null;
     }

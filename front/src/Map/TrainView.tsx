@@ -6,26 +6,31 @@ import {TrainPanel} from '../TrainPanel';
 import {getTrainTimeLine} from '../requests';
 import {LngLatBounds} from '@yandex/ymaps3-types';
 import {TrainMarker} from '../TrainMarker';
+import { Loading } from '../Loading';
 
 type TrainProps = Ymaps & {
     id: string;
     moment: number;
+    wagonId?: number;
     setLocation: SetMapLocation;
 }
 
-export const TrainView = withMap(function({id, moment, setLocation, ymaps}: TrainProps) {
+export const TrainView = withMap(function({id, moment, wagonId, setLocation, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<TrainTimeline>();
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
-        getTrainTimeLine(id, moment).then((data) => {
+        setLoading(true);
+        getTrainTimeLine(id, moment, wagonId).then((data) => {
             const detail = (data as unknown as { detail: string }).detail
             if (detail) {
                 alert(detail);
+                setLoading(false);
                 return;
             }
             const nextTimeline = {
                 ...data,
-                events: compactTrainTimeLineEvents(data)
+                events: compactTrainTimeLineEvents(data, wagonId)
             };
             setTimeline(nextTimeline);
 
@@ -39,9 +44,14 @@ export const TrainView = withMap(function({id, moment, setLocation, ymaps}: Trai
             }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
             setLocation({bounds});
+            setLoading(false);
+        }).catch((e) => {
+            console.error(e);
+            setLoading(false);
         })
-    }, [id, setLocation, moment]);
+    }, [id, setLocation, moment, wagonId]);
 
+    if (loading) return <Loading loading={loading} />
     if (!timeline) return null;
 
     return (
