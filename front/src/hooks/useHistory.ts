@@ -23,7 +23,7 @@ export function getParamsFromPath(): UrlParams {
         type: availableTypes.includes(type) ? type : 'main',
         id,
         moment,
-        wagonId
+        wagonId,
     };
 }
 
@@ -33,12 +33,12 @@ export const pushHistory = (title: string, query?: Record<string, any>) => {
     if (query) {
         Object.keys(query).forEach((key) => {
             searchParams.set(key, query[key].toString());
-        });
+        })
     }
 
     window.history.pushState(null, '', `/${title}?${searchParams.toString()}`);
     historyWatchers.forEach((watcher) => watcher());
-};
+}
 
 window.onpopstate = () => {
     historyWatchers.forEach((watcher) => watcher());

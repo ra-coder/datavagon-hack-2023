@@ -12,16 +12,14 @@ export const Map = withMap(function ({ymaps}: Ymaps) {
     const projection = React.useRef(new ymaps.SphericalMercator());
     const [location, setLocation] = React.useState<YMapLocationRequest>(INITIAL_LOCATION);
 
-    return (
-        <React.Fragment>
-            <ymaps.YMap location={location} projection={projection.current} margin={[0, 0, 0, 400]}>
-                <BaseLayers />
-                <PathView setLocation={setLocation} />
-                <ymaps.YMapHint hint={(object) => object?.properties?.hint}>
-                    <TrainHint />
-                    <WagonHint />
-                </ymaps.YMapHint>
-            </ymaps.YMap>
-        </React.Fragment>
-    );
-});
+    return <React.Fragment>
+        <ymaps.YMap location={location} projection={projection.current} margin={[0, 0, 0, 400]}>
+            <BaseLayers />
+            <PathView setLocation={setLocation}/>
+            <ymaps.YMapHint hint={object => object?.properties?.hint}>
+                <TrainHint />
+                <WagonHint />
+            </ymaps.YMapHint>
+        </ymaps.YMap>
+    </React.Fragment>
+})

@@ -20,7 +20,7 @@ export function MainView() {
         pushHistory('', {moment});
         getTrainsList(moment, TIME_WINDOW).then((data) => {
             setTrains(data.trains);
-        });
+        })
     }, [moment]);
 
     const onTimelineUpdate = React.useCallback((moment: number) => {
@@ -41,7 +41,7 @@ export function MainView() {
                     }}
                 />
             ))}
-            <Timeline initialMoment={INITIAL_MOMENT} onUpdate={onTimelineUpdate} />
+          <Timeline initialMoment={INITIAL_MOMENT} onUpdate={onTimelineUpdate} />
         </>
     );
 }
