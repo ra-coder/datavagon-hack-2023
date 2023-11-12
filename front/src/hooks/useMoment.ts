@@ -12,6 +12,12 @@ const useMoment = (initialMoment: number): [number, React.Dispatch<React.SetStat
     const [moment, setMoment] = React.useState<number>(initialMoment);
 
     return [moment, setMoment];
-};
+}
 
-export {useMoment, MIN_MOMENT, MAX_MOMENT, INITIAL_MOMENT, TIME_WINDOW};
+export {
+    useMoment,
+    MIN_MOMENT,
+    MAX_MOMENT,
+    INITIAL_MOMENT,
+    TIME_WINDOW
+};

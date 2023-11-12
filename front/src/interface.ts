@@ -64,5 +64,5 @@ export interface IdealPath {
         name: string;
         latitude: number;
         longitude: number;
-    }[];
+    }[]
 }

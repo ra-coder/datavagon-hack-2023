@@ -20,15 +20,15 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
 
     const renderRow = (title: string, val: string) => {
         return (
-            <div className="TrainPanel__row">
+            <div className='TrainPanel__row'>
                 {title}: <span>{val}</span>
             </div>
-        );
-    };
+        )
+    }
 
     const renderList = (title: string, list: (string | number)[]) => {
         return (
-            <div className="TrainPanel__row">
+            <div className='TrainPanel__row'>
                 {title}:
                 <ul>
                     {list.map((val, i) => {
@@ -38,45 +38,52 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
 
                         return (
                             <li key={i}>
-                                <a onClick={() => pushHistory(`wagon/${val}`)} className={className}>
+                                <a
+                                    onClick={() => pushHistory(`wagon/${val}`)}
+                                    className={className}
+                                >
                                     {val}
                                 </a>
                             </li>
-                        );
+                        )
                     })}
                 </ul>
             </div>
-        );
-    };
+        )
+    }
 
     const renderEvent = (timeEvent: TimeEventTrain) => {
         const [date, time] = stringifyDate(new Date(timeEvent.moment * 1000));
         return (
-            <div key={timeEvent.dislocation.id} className="TrainPanel__time-event">
-                <div className="TrainPanel__time-event-time">
+            <div key={timeEvent.dislocation.id} className='TrainPanel__time-event'>
+                <div className='TrainPanel__time-event-time'>
                     {/* Время появления */}
                     <span>{date}</span>
                     <span>{time}</span>
                 </div>
-                <div className="TrainPanel__time-event-meta">
+                <div className='TrainPanel__time-event-meta'>
                     {renderRow('Станция', `${timeEvent.dislocation.name} ${String(timeEvent.dislocation.id)}`)}
                     {renderList('Вагоны', timeEvent.vagon_ids)}
                 </div>
             </div>
-        );
-    };
+        )
+    }
 
     return (
-        <div className="TrainPanel">
-            <div className="TrainPanel__title">
+        <div className='TrainPanel'>
+            <div className='TrainPanel__title'>
                 {train.name} {train.train_index}
             </div>
 
             {renderRow('Номер поезда', train_id)}
             {renderRow('Маршрут', `${train_from} - ${trin_to}`)}
 
-            <div className="TrainPanel__title-history">История</div>
-            <div className="TrainPanel__time-events">{timeline.events.map(renderEvent)}</div>
+            <div className='TrainPanel__title-history'>
+                История
+            </div>
+            <div className='TrainPanel__time-events'>
+                {timeline.events.map(renderEvent)}
+            </div>
         </div>
-    );
-};
+    )
+}

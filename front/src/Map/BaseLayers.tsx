@@ -1,6 +1,6 @@
 import {Ymaps, withMap} from '../hooks/withMap';
 
-export const BaseLayers = withMap(function ({ymaps}: Ymaps) {
+export const BaseLayers = withMap(function({ymaps}: Ymaps) {
     return (
         <>
             <ymaps.YMapTileDataSource
@@ -26,14 +26,13 @@ export const BaseLayers = withMap(function ({ymaps}: Ymaps) {
                 id="shadow"
                 raster={{
                     type: 'ground',
-                    fetchTile:
-                        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mMUmcmAARiHsiAABU0GzXs/qVUAAAAASUVORK5CYII='
+                    fetchTile: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAQAAAAnOwc2AAAAEUlEQVR42mMUmcmAARiHsiAABU0GzXs/qVUAAAAASUVORK5CYII='
                 }}
             />
             <ymaps.YMapLayer
                 source="shadow"
                 type="ground"
-                options={{raster: {awaitAllTilesOnFirstDisplay: true}}}
+                options={{raster:{awaitAllTilesOnFirstDisplay: true}}}
                 zIndex={1200}
             />
             <ymaps.YMapDefaultFeaturesLayer zIndex={1300} />
@@ -42,4 +41,4 @@ export const BaseLayers = withMap(function ({ymaps}: Ymaps) {
             </ymaps.YMapControls>
         </>
     );
-});
+})

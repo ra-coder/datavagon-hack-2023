@@ -18,9 +18,10 @@
 }
 
 .TrainPanel__row {
+
 }
 
-.TrainPanel__row li a {
+.TrainPanel__row li a{
     cursor: pointer;
 }
 

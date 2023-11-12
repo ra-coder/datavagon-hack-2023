@@ -1,12 +1,12 @@
 import React from 'react';
 import {Ymaps, withMap} from '../hooks/withMap';
 import {BehaviorMapEventHandler, LngLatBounds} from '@yandex/ymaps3-types';
-import {getStations} from '../requests';
-import {StationMarker} from './StationMarker';
+import { getStations } from '../requests';
+import { StationMarker } from './StationMarker';
 
 type StationsProps = Ymaps & {
     initialBounds: LngLatBounds;
-};
+}
 
 function isInBounds(station: Station, bounds: LngLatBounds) {
     const [x, y] = [station.longitude, station.latitude];
@@ -20,31 +20,33 @@ type Station = {
     id: number;
     name: string;
     latitude: number;
-    longitude: number;
-};
+    longitude: number
+}
 
 function IntStations({initialBounds, ymaps}: StationsProps) {
     const [bounds, setBounds] = React.useState(initialBounds);
     const onActionEnd = React.useCallback<BehaviorMapEventHandler>(({location}) => {
-        setBounds(location.bounds);
+        setBounds(location.bounds)
     }, []);
     const [stations, setStations] = React.useState<Station[]>();
 
     React.useEffect(() => {
         getStations().then((data) => {
             setStations(data.stations);
-        });
+        })
     }, []);
 
     if (!stations) return null;
 
     return (
         <>
-            {stations
-                .filter((s) => isInBounds(s, bounds))
-                .map((s) => (
-                    <StationMarker dislocation={s} />
-                ))}
+            {
+                stations
+                    .filter((s) => isInBounds(s, bounds))
+                    .map((s) => (
+                        <StationMarker dislocation={s} />
+                    ))
+            }
             <ymaps.YMapListener onActionEnd={onActionEnd} />
         </>
     );

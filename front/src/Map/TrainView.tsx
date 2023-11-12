@@ -14,9 +14,9 @@ type TrainProps = Ymaps & {
     moment: number;
     wagonId?: number;
     setLocation: SetMapLocation;
-};
+}
 
-export const TrainView = withMap(function ({id, moment, wagonId, setLocation, ymaps}: TrainProps) {
+export const TrainView = withMap(function({id, moment, wagonId, setLocation, ymaps}: TrainProps) {
     const [timeline, setTimeline] = React.useState<TrainTimeline>();
     const [loading, setLoading] = React.useState(false);
     const [idelPath, setIdealPath] = React.useState<IdealPath>({path: []});
@@ -25,7 +25,7 @@ export const TrainView = withMap(function ({id, moment, wagonId, setLocation, ym
         setLoading(true);
         Promise.all([
             getTrainTimeLine(id, moment, wagonId).then((data) => {
-                const detail = (data as unknown as {detail: string}).detail;
+                const detail = (data as unknown as { detail: string }).detail
                 if (detail) {
                     alert(detail);
                     setLoading(false);
@@ -40,33 +40,25 @@ export const TrainView = withMap(function ({id, moment, wagonId, setLocation, ym
             getIdealPath(id).then((data) => {
                 setIdealPath(data);
 
-                const bounds = data.path.reduce<LngLatBounds>(
-                    (memo, p) => {
-                        memo[0][0] = Math.min(memo[0][0], p.longitude);
-                        memo[0][1] = Math.min(memo[0][1], p.latitude);
-                        memo[1][0] = Math.max(memo[1][0], p.longitude);
-                        memo[1][1] = Math.max(memo[1][1], p.latitude);
+                const bounds = data.path.reduce<LngLatBounds>((memo, p) => {
+                    memo[0][0] = Math.min(memo[0][0], p.longitude);
+                    memo[0][1] = Math.min(memo[0][1], p.latitude);
+                    memo[1][0] = Math.max(memo[1][0], p.longitude);
+                    memo[1][1] = Math.max(memo[1][1], p.latitude);
 
-                        return memo;
-                    },
-                    [
-                        [Infinity, Infinity],
-                        [-Infinity, -Infinity]
-                    ] as LngLatBounds
-                );
+                    return memo;
+                }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
                 setLocation({bounds});
             })
-        ])
-            .catch((e) => {
-                console.error(e);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        ]).catch((e) => {
+            console.error(e);
+        }).finally(() => {
+            setLoading(false);
+        });
     }, [id, setLocation, moment, wagonId]);
 
-    if (loading) return <Loading loading={loading} />;
+    if (loading) return <Loading loading={loading} />
     if (!timeline) return null;
 
     return (
