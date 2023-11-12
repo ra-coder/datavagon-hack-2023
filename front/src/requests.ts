@@ -1,6 +1,6 @@
 import type {IdealPath, TrainTimeline, WagonTimeline} from './interface';
 
-export const backendUrl = 'http://158.160.26.131:8000/api/v1';
+export const backendUrl = 'https://skycoders.tech/api/v1';
 
 const MOMENT_TO_TIMESTAMP = 1 / 1000;
 

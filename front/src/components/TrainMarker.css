@@ -1,7 +1,8 @@
 .TrainMarker {
     width: 26px;
+    padding: 2px;
     background: #cacaca;
-    transform: translate(-50%, -13px);
+    transform: translate(-50%, -15px);
 }
 
 .TrainMarker_active {

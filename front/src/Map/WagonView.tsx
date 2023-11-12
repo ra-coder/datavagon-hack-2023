@@ -141,6 +141,7 @@ export const WagonView = withMap(function ({id, moment, setLocation, ymaps}: Wag
                                     event={{...event, train: parsedE.train}}
                                     wagon={timeline.vagon}
                                     order={index + 1}
+                                    active={index === 0}
                                 />
                             );
                         })}

@@ -50,7 +50,10 @@ export interface WagonEventsParsed {
         start: number;
         end: number;
     };
-    mapData: any[];
+    mapData: {
+        dislocation: Dislocation;
+        moment: number;
+    }[];
 }
 
 export interface WagonTimelineParsed extends WagonTimeline {
