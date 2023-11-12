@@ -14,7 +14,7 @@ type WagonViewProps = Ymaps & {
     setLocation: SetMapLocation;
 };
 
-export function compactTrainTimeLineEvents(mapData: { dislocation: Dislocation }[]): any[] {
+export function compactTrainTimeLineEvents(mapData: {dislocation: Dislocation}[]): any[] {
     return mapData.reduce<any[]>((acc, currentEvent, index, array) => {
         if (index === array.length - 1) {
             acc.push(currentEvent);
@@ -25,8 +25,7 @@ export function compactTrainTimeLineEvents(mapData: { dislocation: Dislocation }
         }
 
         return acc;
-
-    }, [])
+    }, []);
 }
 
 const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] => {
@@ -42,8 +41,8 @@ const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] =>
             endDislocaion = curEvent.dislocation;
             mapData.push({
                 dislocation: curEvent.dislocation,
-                moment: curEvent.moment,
-            })
+                moment: curEvent.moment
+            });
             continue;
         }
         const prevEvent = wagonEvents[i + 1];
@@ -58,32 +57,32 @@ const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] =>
                 duration: endMoment! - prevEvent.moment,
                 moment: {
                     start: prevEvent.moment,
-                    end: endMoment!,
+                    end: endMoment!
                 },
-                mapData: mapData.slice(),
+                mapData: mapData.slice()
             });
             endMoment = curEvent.moment;
             endDislocaion = curEvent.dislocation;
             mapData.length = 0;
             mapData.push({
                 dislocation: curEvent.dislocation,
-                moment: curEvent.moment,
-            })
+                moment: curEvent.moment
+            });
             continue;
         }
 
         /* Можно аккамулировать информацию по одному поезду в этом месте */
         mapData.push({
             dislocation: curEvent.dislocation,
-            moment: curEvent.moment,
-        })
+            moment: curEvent.moment
+        });
     }
 
-    res.forEach(r => {
+    res.forEach((r) => {
         r.mapData = compactTrainTimeLineEvents(r.mapData)
             /* cuz data */
-            .filter(v => Boolean(v.dislocation.latitude));
-    })
+            .filter((v) => Boolean(v.dislocation.latitude));
+    });
 
     return res;
 };
@@ -102,16 +101,19 @@ export const WagonView = withMap(function ({id, moment, setLocation, ymaps}: Wag
                 };
                 setTimeline(nextTimeline);
 
-            const bounds: LngLatBounds = [[Infinity, Infinity], [-Infinity, -Infinity]];
-            nextTimeline.parsedEvents.forEach((eve, iv) => {
-                if (iv > 9) return null;
-                eve.mapData.forEach((event) => {
-                    bounds[0][0] = Math.min(bounds[0][0], event.dislocation.longitude);
-                    bounds[0][1] = Math.min(bounds[0][1], event.dislocation.latitude);
-                    bounds[1][0] = Math.max(bounds[1][0], event.dislocation.longitude);
-                    bounds[1][1] = Math.max(bounds[1][1], event.dislocation.latitude);
-                })
-            });
+                const bounds: LngLatBounds = [
+                    [Infinity, Infinity],
+                    [-Infinity, -Infinity]
+                ];
+                nextTimeline.parsedEvents.forEach((eve, iv) => {
+                    if (iv > 9) return null;
+                    eve.mapData.forEach((event) => {
+                        bounds[0][0] = Math.min(bounds[0][0], event.dislocation.longitude);
+                        bounds[0][1] = Math.min(bounds[0][1], event.dislocation.latitude);
+                        bounds[1][0] = Math.max(bounds[1][0], event.dislocation.longitude);
+                        bounds[1][1] = Math.max(bounds[1][1], event.dislocation.latitude);
+                    });
+                });
 
                 setLocation({bounds});
             })
@@ -128,26 +130,28 @@ export const WagonView = withMap(function ({id, moment, setLocation, ymaps}: Wag
 
     return (
         <>
-        {timeline.parsedEvents.map((parsedE, iv) => {
-            if (iv > 9) return null;
-            return (
-                <>
-                    {parsedE.mapData.map((event, index) => {
-                        return <WagonMarker
-                            key={`${iv}-${index}`}
-                            event={{...event, train: parsedE.train}}
-                            wagon={timeline.vagon}
-                            order={index + 1}
+            {timeline.parsedEvents.map((parsedE, iv) => {
+                if (iv > 9) return null;
+                return (
+                    <>
+                        {parsedE.mapData.map((event, index) => {
+                            return (
+                                <WagonMarker
+                                    key={`${iv}-${index}`}
+                                    event={{...event, train: parsedE.train}}
+                                    wagon={timeline.vagon}
+                                    order={index + 1}
+                                />
+                            );
+                        })}
+                        <ymaps.YMapFeature
+                            key={iv}
+                            geometry={{type: 'LineString', coordinates: parsedE.mapData.map(getLngLat)}}
+                            style={{stroke: [{width: 5, color: '#aafafa'}]}}
                         />
-                    })}
-                    <ymaps.YMapFeature
-                        key={iv}
-                        geometry={{type: 'LineString', coordinates: parsedE.mapData.map(getLngLat)}}
-                        style={{stroke: [{width: 5, color: '#aafafa'}]}}
-                    />
-                </>
-            )
-        })}
+                    </>
+                );
+            })}
             {/* {timeline.events.map((event, index) => (
                 <WagonMarker
                     key={index}
