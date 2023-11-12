@@ -21,6 +21,10 @@
 
 }
 
+.TrainPanel__row li a{
+    cursor: pointer;
+}
+
 .TrainPanel__row span {
     font-weight: bold;
 }

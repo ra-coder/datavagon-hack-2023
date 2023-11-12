@@ -40,7 +40,7 @@ export const TrainView = withMap(function({id, moment, setLocation, ymaps}: Trai
 
             setLocation({bounds});
         })
-    }, [id, setLocation]);
+    }, [id, setLocation, moment]);
 
     if (!timeline) return null;
 
@@ -52,11 +52,12 @@ export const TrainView = withMap(function({id, moment, setLocation, ymaps}: Trai
                     event={event}
                     train={timeline.train}
                     order={index + 1}
+                    active={index === timeline.events.length - 1}
                 />
             ))}
             <ymaps.YMapFeature
                 geometry={{type: 'LineString', coordinates: timeline.events.map(getLngLat)}}
-                style={{stroke: [{width: 5, color: '#aaffaa'}]}}
+                style={{stroke: [{width: 5, color: '#aaaaff'}]}}
             />
             <TrainPanel id={id} timeline={timeline} />
         </>
