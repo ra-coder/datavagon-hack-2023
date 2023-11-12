@@ -13,7 +13,7 @@ train_api_router = APIRouter()
 async def get_table_calendar(
     train_index: str,
     on_timestamp: int | None = Query(alias='on_timestamp', default=None),
-    window_secs: int = Query(alias='window_secs', default=24*7*60*60),
+    window_secs: int = Query(alias='window_secs', default=24*30*60*60),
     # session: AsyncSession = Depends(get_session),
 ) -> TrainRouteInfo:
     query = text("""
@@ -62,6 +62,7 @@ async def get_table_calendar(
             )
                 ) as train_timeline
         from train_timeline
+        where longitude notnull
         group by train_index, train_name;    
     """)
 

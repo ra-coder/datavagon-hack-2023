@@ -33,7 +33,11 @@ async def get_stations_path(path):
                 "path": path,
             },
         )
-        stations_by_id = {rec["id"]: Station.parse_obj(rec) for rec in result.scalars()}
+        stations_by_id = {
+            rec["id"]: Station.parse_obj(rec)
+            for rec in result.scalars()
+            if rec["latitude"] is not None
+        }
     return [stations_by_id[st] for st in path]
 
 
