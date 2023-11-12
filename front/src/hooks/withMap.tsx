@@ -5,15 +5,13 @@ import type SphericalMerkatorPackage from '@yandex/ymaps3-types/packages/spheric
 import type ControlsPackage from '@yandex/ymaps3-types/packages/controls/react';
 
 interface HintPackage {
-    YMapHint: React.FC<React.PropsWithChildren<
-        {hint: (object: {properties: {hint: any}} | undefined) => unknown}
-    >>;
+    YMapHint: React.FC<React.PropsWithChildren<{hint: (object: {properties: {hint: any}} | undefined) => unknown}>>;
     YMapHintContext: React.Context<{hint: any}>;
 }
 
 type YmapsModule = typeof Main & typeof SphericalMerkatorPackage & typeof ControlsPackage & HintPackage;
 export interface Ymaps {
-    ymaps: YmapsModule
+    ymaps: YmapsModule;
 }
 
 let ymapsPromise: Promise<YmapsModule>;
@@ -24,15 +22,13 @@ export function withMap<T extends Ymaps>(Child: React.ComponentType<T>) {
         React.useEffect(() => {
             ymapsPromise ??= getYmapsPromise();
 
-            ymapsPromise.then(setYmaps)
-        }, [])
+            ymapsPromise.then(setYmaps);
+        }, []);
 
         if (!ymaps) return null;
 
-        return (
-            <Child {...props as T} ymaps={ymaps} />
-        );
-    }
+        return <Child {...(props as T)} ymaps={ymaps} />;
+    };
 }
 
 async function getYmapsPromise(): Promise<YmapsModule> {
@@ -47,7 +43,7 @@ async function getYmapsPromise(): Promise<YmapsModule> {
         ...reactify.module(ymaps3),
         ...sphericalMercator,
         ...controls,
-        ...hint as unknown as HintPackage,
+        ...(hint as unknown as HintPackage),
         reactify
     };
 }

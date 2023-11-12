@@ -16,20 +16,11 @@ export function PathView({setLocation}: PathViewProps) {
 
     switch (params.type) {
         case 'main':
-           return <MainView />;
+            return <MainView />;
         case 'train':
-            return <TrainView
-                id={params.id!}
-                moment={moment}
-                setLocation={setLocation}
-                wagonId={params.wagonId}
-            />;
+            return <TrainView id={params.id!} moment={moment} setLocation={setLocation} wagonId={params.wagonId} />;
         case 'wagon':
-            return <WagonView
-                id={params.id!}
-                moment={moment}
-                setLocation={setLocation}
-            />;
+            return <WagonView id={params.id!} moment={moment} setLocation={setLocation} />;
         default:
             return null;
     }
