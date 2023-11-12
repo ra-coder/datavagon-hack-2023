@@ -5,7 +5,7 @@ import {Timeline} from '../components/Timeline';
 import {getTrainsList} from '../requests';
 import {pushHistory} from '../hooks/useHistory';
 import {INITIAL_MOMENT, TIME_WINDOW} from '../hooks/useMoment';
-import { Loading } from '../Loading';
+import { Loading } from '../components/Loading';
 
 interface Train {
     events: TimeEventTrain[];
