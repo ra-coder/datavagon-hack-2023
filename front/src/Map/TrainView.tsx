@@ -1,13 +1,13 @@
 import React from 'react';
-import {Ymaps, withMap} from '../withMap';
+import {Ymaps, withMap} from '../hooks/withMap';
 import {compactTrainTimeLineEvents, getLngLat} from '../utils';
 import {IdealPath, SetMapLocation, TrainTimeline} from '../interface';
-import {TrainPanel} from '../TrainPanel';
+import {TrainPanel} from '../components/TrainPanel';
 import {getIdealPath, getTrainTimeLine} from '../requests';
 import {LngLatBounds} from '@yandex/ymaps3-types';
-import {TrainMarker} from '../TrainMarker';
-import {Loading} from '../Loading';
-import {StationMarker} from '../StationMarker';
+import {TrainMarker} from '../components/TrainMarker';
+import {Loading} from '../components/Loading';
+import {StationMarker} from '../components/StationMarker';
 
 type TrainProps = Ymaps & {
     id: string;
@@ -38,7 +38,6 @@ export const TrainView = withMap(function({id, moment, wagonId, setLocation, yma
                 setTimeline(nextTimeline);
             }),
             getIdealPath(id).then((data) => {
-                console.log(data);
                 setIdealPath(data);
 
                 const bounds = data.path.reduce<LngLatBounds>((memo, p) => {

@@ -1,6 +1,6 @@
-import {Dislocation} from './interface';
-import {getLngLat} from './utils';
-import {Ymaps, withMap} from './withMap';
+import {Dislocation} from '../interface';
+import {getLngLat} from '../utils';
+import {Ymaps, withMap} from '../hooks/withMap';
 
 import './StationMarker.css'
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import {useWatchHistory} from '../utils'
+import {useWatchHistory} from '../hooks/useHistory';
 import {MainView} from './MainView';
 import {TrainView} from './TrainView';
 import {SetMapLocation} from '../interface';
-import {INITIAL_MOMENT} from '../withMoment';
+import {INITIAL_MOMENT} from '../hooks/useMoment';
 import {WagonView} from './WagonView';
 
 interface PathViewProps {
