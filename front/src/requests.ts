@@ -16,8 +16,8 @@ export function getStations() {
     return request(`${backendUrl}/stations`);
 }
 
-export async function getWagonInfo(wagonId: string): Promise<WagonTimeline> {
-    return request(`${backendUrl}/vagon/${wagonId}/timeline`);
+export async function getWagonTimeLine(id: string, moment: number): Promise<WagonTimeline> {
+    return request(`${backendUrl}/vagon/${id}/timeline?on_timestamp=${moment * MOMENT_TO_TIMESTAMP}`);
 }
 
 function request(url: string) {

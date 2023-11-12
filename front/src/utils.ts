@@ -1,5 +1,5 @@
 import {LngLat} from '@yandex/ymaps3-types';
-import type {TimeEventTrain, TrainTimeline} from './interface';
+import type {Dislocation, TimeEventTrain, TrainTimeline} from './interface';
 import React from 'react';
 
 const historyWatchers: (() => void)[] = [];
@@ -66,7 +66,7 @@ const stringifyDate = (dateMoment: Date): [string, string] => {
 
     return [date, time];
 }
-export function getLngLat(event: TimeEventTrain): LngLat {
+export function getLngLat(event: {dislocation: Dislocation}): LngLat {
     return [event.dislocation.longitude, event.dislocation.latitude];
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {stringifyDate} from './utils';
+import {pushHistory, stringifyDate} from './utils';
 import type {TimeEventTrain, TrainTimeline} from './interface';
 
 import './TrainPanel.css';
@@ -48,7 +48,15 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
     const renderList = (title: string, list: (string | number)[]) => {
         return (
             <div className='TrainPanel__row'>
-                {title}: <ul>{list.map((val, i) => <li key={i}>{val}</li>)}</ul>
+                {title}: <ul>
+                    {list.map((val, i) => (
+                        <li key={i}>
+                            <a onClick={() => pushHistory(`wagon/${val}`)}>
+                                {val}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
             </div>
         )
     }
