@@ -48,7 +48,20 @@ export const TrainPanel: React.FC<TrainPanelProps> = ({id, timeline}) => {
     const renderList = (title: string, list: (string | number)[]) => {
         return (
             <div className='TrainPanel__row'>
-                {title}: <ul>{list.map((val, i) => <li key={i}>{val}</li>)}</ul>
+                {title}:
+                <ul>
+                    {list.map((val, i) => {
+                        const searchParams = new URLSearchParams(window.location.search);
+                        const wagonId = Number(searchParams.get('wagonId')) || undefined;
+                        const className = val === wagonId ? 'TrainPanel__hightlight' : '';
+
+                        return (
+                            <li key={i}>
+                                <a href={`/wagon/${val}`} className={className}>{val}</a>
+                            </li>
+                        )
+                    })}
+                </ul>
             </div>
         )
     }

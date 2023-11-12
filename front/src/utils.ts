@@ -24,6 +24,7 @@ export interface UrlParams {
     type: AvailableType;
     id?: string;
     moment?: number;
+    wagonId?: number;
 }
 
 const availableTypes: AvailableType[] = ['train', 'wagon'];
@@ -35,11 +36,13 @@ export function getParamsFromPath(): UrlParams {
 
     const searchParams = new URLSearchParams(window.location.search);
     const moment = Number(searchParams.get('moment')) || undefined;
+    const wagonId = Number(searchParams.get('wagonId')) || undefined;
 
     return {
         type: availableTypes.includes(type) ? type : 'main',
         id,
-        moment
+        moment,
+        wagonId,
     };
 }
 
@@ -70,14 +73,27 @@ export function getLngLat(event: TimeEventTrain): LngLat {
     return [event.dislocation.longitude, event.dislocation.latitude];
 }
 
-export function compactTrainTimeLineEvents(timeline: TrainTimeline) {
+export function compactTrainTimeLineEvents(timeline: TrainTimeline, wagonId?: number) {
     return timeline.events.reduce<TimeEventTrain[]>((acc, currentEvent, index, array) => {
-        if (index === array.length - 1) {
-            acc.push(currentEvent);
-        } else if (index === 0) {
-            return acc;
-        } else if (currentEvent.dislocation.id !== array[index - 1].dislocation.id) {
-            acc.push(array[index - 1]);
+        if (wagonId) {
+            if (!currentEvent.vagon_ids.includes(wagonId)) {
+                return acc;
+            }
+            if (index === array.length - 1) {
+                acc.push(currentEvent);
+            } else if (index === 0) {
+                return acc;
+            } else if (currentEvent.dislocation.id !== array[index - 1].dislocation.id) {
+                acc.push(array[index - 1]);
+            }
+        } else {
+            if (index === array.length - 1) {
+                acc.push(currentEvent);
+            } else if (index === 0) {
+                return acc;
+            } else if (currentEvent.dislocation.id !== array[index - 1].dislocation.id) {
+                acc.push(array[index - 1]);
+            }
         }
 
         return acc;

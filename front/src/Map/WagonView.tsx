@@ -9,6 +9,7 @@ import type {
 } from '../interface';
 import { getWagonInfo } from '../requests';
 import { WagonPanel } from '../WagonPanel';
+import { Loading } from '../Loading';
 
 type WagonProps = Ymaps & {
     id: string;
@@ -61,8 +62,10 @@ const parseWagonEvents = (wagonEvents: TimeEventWagon[]): WagonEventsParsed[] =>
 
 export const WagonView = withMap(function({id, moment, setLocation, ymaps}: WagonProps) {
     const [wagonInfo, setWagonInfo] = React.useState<WagonInfoTimeline>();
+    const [loading, setLoading] = React.useState(false);
 
     React.useEffect(() => {
+        setLoading(true);
         getWagonInfo(id/* , moment */).then((data) => {
             const wagonInfoTimeline = {
                 ...data,
@@ -80,9 +83,14 @@ export const WagonView = withMap(function({id, moment, setLocation, ymaps}: Wago
             // }, [[Infinity, Infinity], [-Infinity, -Infinity]] as LngLatBounds);
 
             // setLocation({bounds});
+            setLoading(false);
+        }).catch((e) => {
+            console.error(e);
+            setLoading(false);
         })
     }, [id, setLocation]);
 
+    if (loading) return <Loading loading={loading} />
     if (!wagonInfo) return null;
 
     return (

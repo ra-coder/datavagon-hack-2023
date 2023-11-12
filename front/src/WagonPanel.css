@@ -34,3 +34,11 @@
 .WagonPanel__row span {
     font-weight: bold;
 }
+
+.WagonPanel__red {
+    color: red;
+}
+
+.WagonPanel__green {
+    color: green;
+}
